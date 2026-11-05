@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CvVariantIdRouteImport } from './routes/cv.$variantId'
 import { Route as PrintSnapshotIdRouteImport } from './routes/print.$snapshotId'
 import { Route as ApiExportsExportIdRouteImport } from './routes/api.exports.$exportId'
+import { Route as CvVariantIdHistoryRouteImport } from './routes/cv.$variantId_.history'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const ApiExportsExportIdRoute = ApiExportsExportIdRouteImport.update({
   path: '/api/exports/$exportId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvVariantIdHistoryRoute = CvVariantIdHistoryRouteImport.update({
+  id: '/cv/$variantId_/history',
+  path: '/cv/$variantId/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
+  '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
+  '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,19 +61,30 @@ export interface FileRoutesById {
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
+  '/cv/$variantId_/history': typeof CvVariantIdHistoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/cv/$variantId' | '/print/$snapshotId' | '/api/exports/$exportId'
+    | '/'
+    | '/cv/$variantId'
+    | '/print/$snapshotId'
+    | '/api/exports/$exportId'
+    | '/cv/$variantId/history'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cv/$variantId' | '/print/$snapshotId' | '/api/exports/$exportId'
+  to:
+    | '/'
+    | '/cv/$variantId'
+    | '/print/$snapshotId'
+    | '/api/exports/$exportId'
+    | '/cv/$variantId/history'
   id:
     | '__root__'
     | '/'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
+    | '/cv/$variantId_/history'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -73,6 +92,7 @@ export interface RootRouteChildren {
   CvVariantIdRoute: typeof CvVariantIdRoute
   PrintSnapshotIdRoute: typeof PrintSnapshotIdRoute
   ApiExportsExportIdRoute: typeof ApiExportsExportIdRoute
+  CvVariantIdHistoryRoute: typeof CvVariantIdHistoryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -105,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExportsExportIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv/$variantId_/history': {
+      id: '/cv/$variantId_/history'
+      path: '/cv/$variantId/history'
+      fullPath: '/cv/$variantId/history'
+      preLoaderRoute: typeof CvVariantIdHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -113,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   CvVariantIdRoute: CvVariantIdRoute,
   PrintSnapshotIdRoute: PrintSnapshotIdRoute,
   ApiExportsExportIdRoute: ApiExportsExportIdRoute,
+  CvVariantIdHistoryRoute: CvVariantIdHistoryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

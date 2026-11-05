@@ -21,11 +21,11 @@ npx playwright install chromium   # once, for PDF export
 bun run dev                        # http://localhost:3000
 ```
 
-| Script | |
-|---|---|
-| `bun run typecheck` / `bun run lint` | checks |
-| `bun run db:generate` | new migration after editing `src/db/schema.ts` (applied automatically on start) |
-| `bun run docker:up` / `docker:logs` | rebuild + start / follow logs |
+| Script                               |                                                                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------- |
+| `bun run typecheck` / `bun run lint` | checks                                                                          |
+| `bun run db:generate`                | new migration after editing `src/db/schema.ts` (applied automatically on start) |
+| `bun run docker:up` / `docker:logs`  | rebuild + start / follow logs                                                   |
 
 ## Layout
 

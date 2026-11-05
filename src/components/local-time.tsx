@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react'
  * never mismatch.
  */
 export function LocalTime({ value }: { value: Date | string | number }) {
-  const d = new Date(value)
-  const [text, setText] = useState(() => d.toISOString().slice(0, 16).replace('T', ' '))
-  useEffect(() => setText(d.toLocaleString()), [d.getTime()])
-  return <time dateTime={d.toISOString()}>{text}</time>
+    const d = new Date(value)
+    const [text, setText] = useState(() => d.toISOString().slice(0, 16).replace('T', ' '))
+    useEffect(() => setText(d.toLocaleString()), [d.getTime()])
+    return <time dateTime={d.toISOString()}>{text}</time>
 }

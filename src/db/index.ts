@@ -9,15 +9,15 @@ export const DATA_DIR = path.resolve(process.env.DATA_DIR ?? 'data')
 export const EXPORTS_DIR = path.join(DATA_DIR, 'exports')
 
 function open() {
-  fs.mkdirSync(EXPORTS_DIR, { recursive: true })
-  const sqlite = new Database(path.join(DATA_DIR, 'cv.db'))
-  sqlite.pragma('journal_mode = WAL')
-  sqlite.pragma('foreign_keys = ON')
-  const db = drizzle(sqlite, { schema })
-  migrate(db, {
-    migrationsFolder: path.resolve(process.env.MIGRATIONS_DIR ?? 'drizzle'),
-  })
-  return db
+    fs.mkdirSync(EXPORTS_DIR, { recursive: true })
+    const sqlite = new Database(path.join(DATA_DIR, 'cv.db'))
+    sqlite.pragma('journal_mode = WAL')
+    sqlite.pragma('foreign_keys = ON')
+    const db = drizzle(sqlite, { schema })
+    migrate(db, {
+        migrationsFolder: path.resolve(process.env.MIGRATIONS_DIR ?? 'drizzle'),
+    })
+    return db
 }
 
 type Db = ReturnType<typeof open>
@@ -26,8 +26,8 @@ type Db = ReturnType<typeof open>
 const g = globalThis as unknown as { __cvDb?: Db }
 
 export function getDb(): Db {
-  g.__cvDb ??= open()
-  return g.__cvDb
+    g.__cvDb ??= open()
+    return g.__cvDb
 }
 
 export { schema }
