@@ -1,10 +1,10 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, Download, FileDown, History, Loader2, Save } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Download, FileDown, History, Loader2, Save, TriangleAlert } from 'lucide-react'
 import { exportsQuery, variantQuery } from '#/cv/queries'
 import { updateVariant } from '#/server/variants'
-import { exportPdf } from '#/server/export'
+import { exportFile } from '#/server/export'
 import { saveVersion } from '#/server/history'
 import { resolveTokens } from '#/themes'
 import { Button } from '#/components/ui/button'
@@ -12,6 +12,16 @@ import { Input } from '#/components/ui/input'
 import { CvEditor } from '#/components/editor/cv-editor'
 import { Preview } from '#/components/editor/preview'
 import { ThemePanel } from '#/components/editor/theme-panel'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '#/components/ui/dropdown-menu'
+import type { PageLayout } from '#/components/editor/preview'
+import type { ExportFormat } from '#/server/export'
 import { LocalTime } from '#/components/local-time'
 import type { CvDoc } from '#/cv/schema'
 import type { ThemeOverrides } from '#/themes'
@@ -38,12 +48,13 @@ function EditorPage() {
 
     const [doc, setDoc] = useState<CvDoc>(variant.doc)
     const [overrides, setOverrides] = useState<ThemeOverrides>(variant.themeOverrides)
+    const [themeId, setThemeId] = useState(variant.themeId)
     const [name, setName] = useState(variant.name)
     const [saveState, setSaveState] = useState<SaveState>('saved')
-    const [pages, setPages] = useState(1)
+    const [layout, setLayout] = useState<PageLayout>({ pages: 1, spillLines: 0 })
 
     // Latest unsaved values, so flush() can save without stale closures.
-    const pending = useRef<{ doc?: CvDoc; themeOverrides?: ThemeOverrides; name?: string }>({})
+    const pending = useRef<{ doc?: CvDoc; themeOverrides?: ThemeOverrides; themeId?: string; name?: string }>({})
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
     const flush = useCallback(async () => {
@@ -98,13 +109,13 @@ function EditorPage() {
         [schedule],
     )
 
-    const tokens = useMemo(() => resolveTokens(variant.themeId, overrides), [variant.themeId, overrides])
+    const tokens = useMemo(() => resolveTokens(themeId, overrides), [themeId, overrides])
 
     const exportsList = useSuspenseQuery(exportsQuery(variantId))
     const pdf = useMutation({
-        mutationFn: async () => {
+        mutationFn: async (format: ExportFormat) => {
             await flush()
-            return exportPdf({ data: { variantId } })
+            return exportFile({ data: { variantId, format } })
         },
         onSuccess: ({ id }) => {
             qc.invalidateQueries({ queryKey: ['exports', variantId] })
@@ -145,9 +156,20 @@ function EditorPage() {
                 />
                 <SaveBadge state={saveState} onRetry={() => void flush().catch(() => {})} />
                 <div className="ml-auto flex items-center gap-3">
-                    <span className="text-muted-foreground text-xs">
-                        {pages} page{pages > 1 ? 's' : ''}
-                    </span>
+                    {layout.spillLines > 0 ? (
+                        <span
+                            className="inline-flex items-center gap-1 text-xs text-amber-700"
+                            title="The last page is nearly empty. Tighten spacing, text size or margins, or hide an item to save a page."
+                        >
+                            <TriangleAlert className="size-3.5" />
+                            Spills onto page {layout.pages} by ~{layout.spillLines} line
+                            {layout.spillLines > 1 ? 's' : ''}
+                        </span>
+                    ) : (
+                        <span className="text-muted-foreground text-xs">
+                            {layout.pages} page{layout.pages > 1 ? 's' : ''}
+                        </span>
+                    )}
                     {version.isSuccess && <span className="text-xs text-emerald-700">Version saved</span>}
                     <Button variant="ghost" onClick={() => void openHistory()}>
                         <History /> History
@@ -162,10 +184,33 @@ function EditorPage() {
                     >
                         <Save /> Save version
                     </Button>
-                    <Button onClick={() => pdf.mutate()} disabled={pdf.isPending}>
-                        {pdf.isPending ? <Loader2 className="animate-spin" /> : <FileDown />}
-                        Export PDF
-                    </Button>
+                    <div className="flex">
+                        <Button className="rounded-r-none" onClick={() => pdf.mutate('pdf')} disabled={pdf.isPending}>
+                            {pdf.isPending ? <Loader2 className="animate-spin" /> : <FileDown />}
+                            Export PDF
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    className="rounded-l-none border-l border-primary-foreground/20 px-2"
+                                    disabled={pdf.isPending}
+                                    aria-label="More export formats"
+                                >
+                                    <ChevronDown />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Export as</DropdownMenuLabel>
+                                <DropdownMenuItem onSelect={() => pdf.mutate('pdf')}>PDF</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => pdf.mutate('docx')}>
+                                    Word (.docx) — single-column, ATS-safe
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={() => pdf.mutate('md')}>Markdown</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => pdf.mutate('json')}>JSON Resume</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
             </header>
             {version.isError && (
@@ -187,17 +232,18 @@ function EditorPage() {
                 <section className="flex min-h-0 flex-col bg-muted/60">
                     <div className="border-b bg-card/70 px-4 py-2">
                         <ThemePanel
-                            themeId={variant.themeId}
+                            themeId={themeId}
                             tokens={tokens}
                             overrides={overrides}
-                            onChange={(o) => {
-                                setOverrides(o)
-                                schedule({ themeOverrides: o })
+                            onChange={(next) => {
+                                setThemeId(next.themeId)
+                                setOverrides(next.overrides)
+                                schedule({ themeId: next.themeId, themeOverrides: next.overrides })
                             }}
                         />
                     </div>
                     <div className="min-h-0 flex-1 overflow-y-auto px-4">
-                        <Preview doc={doc} themeId={variant.themeId} tokens={tokens} onPageCount={setPages} />
+                        <Preview doc={doc} themeId={themeId} tokens={tokens} onLayout={setLayout} />
                     </div>
                 </section>
             </div>

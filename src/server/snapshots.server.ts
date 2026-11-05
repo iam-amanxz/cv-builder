@@ -13,6 +13,7 @@ export function createSnapshot(variantId: string, reason: SnapshotReason, label 
     const v = db.select().from(variants).where(eq(variants.id, variantId)).get()
     if (!v) throw new Error('CV not found')
     const id = nanoid(12)
+    const tokens = resolveTokens(v.themeId, v.themeOverrides)
     db.insert(snapshots)
         .values({
             id,
@@ -21,8 +22,8 @@ export function createSnapshot(variantId: string, reason: SnapshotReason, label 
             reason,
             doc: v.doc,
             themeId: v.themeId,
-            themeTokens: resolveTokens(v.themeId, v.themeOverrides),
+            themeTokens: tokens,
         })
         .run()
-    return { id, variant: v }
+    return { id, variant: v, tokens }
 }

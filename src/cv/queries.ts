@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
+import { listPresets } from '#/server/themes'
 import { listSnapshots } from '#/server/history'
 import { getSnapshot } from '#/server/export'
 import { getVariant, listExports, listVariants } from '#/server/variants'
@@ -33,3 +34,5 @@ export const snapshotQuery = (id: string) =>
         queryFn: () => getSnapshot({ data: { id } }),
         staleTime: Infinity,
     })
+
+export const presetsQuery = () => queryOptions({ queryKey: ['presets'], queryFn: () => listPresets() })

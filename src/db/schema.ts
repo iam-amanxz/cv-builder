@@ -57,3 +57,16 @@ export const exportsTable = sqliteTable(
     },
     (t) => [index('exports_snapshot_idx').on(t.snapshotId)],
 )
+
+/**
+ * "My themes": a named set of tokens on top of a built-in theme component.
+ * Applying one copies its tokens into the CV, so editing a preset later
+ * never silently changes CVs that already use it.
+ */
+export const themePresets = sqliteTable('theme_presets', {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    baseThemeId: text('base_theme_id').notNull(),
+    tokens: text('tokens', { mode: 'json' }).$type<ThemeTokens>().notNull(),
+    createdAt: createdAt(),
+})

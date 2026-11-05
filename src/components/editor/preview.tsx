@@ -5,6 +5,12 @@ import type { ThemeTokens } from '#/themes'
 
 const PX_PER_MM = 96 / 25.4
 
+export interface PageLayout {
+    pages: number
+    /** Approx. lines on a nearly-empty last page; 0 when it isn't a near miss. */
+    spillLines: number
+}
+
 /**
  * Live preview: renders the same theme component used by the print route,
  * on a paper of the chosen size, scaled to fit. Page-break lines are an
@@ -14,12 +20,12 @@ export function Preview({
     doc,
     themeId,
     tokens,
-    onPageCount,
+    onLayout,
 }: {
     doc: CvDoc
     themeId: string
     tokens: ThemeTokens
-    onPageCount?: (n: number) => void
+    onLayout?: (layout: PageLayout) => void
 }) {
     const theme = getTheme(themeId)
     const dims = pageDims(tokens)
@@ -47,7 +53,12 @@ export function Preview({
     }, [pageW])
 
     const pages = Math.max(1, Math.ceil(height / contentH))
-    useLayoutEffect(() => onPageCount?.(pages), [pages, onPageCount])
+    // A last page that is mostly empty usually means "almost fits": report
+    // roughly how many lines spill over so the user can tighten.
+    const lastUsed = height - (pages - 1) * contentH
+    const lineH = tokens.fontSize * (96 / 72) * tokens.lineHeight
+    const spillLines = pages > 1 && lastUsed < contentH * 0.25 ? Math.max(1, Math.ceil(lastUsed / lineH)) : 0
+    useLayoutEffect(() => onLayout?.({ pages, spillLines }), [pages, spillLines, onLayout])
 
     return (
         <div ref={outerRef} className="w-full py-4">

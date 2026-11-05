@@ -41,7 +41,17 @@ export interface ThemeDef {
 
 export const FONT_STACKS: Record<string, string> = {
     Inter: "'Inter Variable', 'Inter', system-ui, sans-serif",
+    'IBM Plex Sans': "'IBM Plex Sans', system-ui, sans-serif",
     'Source Serif': "'Source Serif 4', Georgia, serif",
+    Lora: "'Lora', Georgia, serif",
+}
+
+/** Real family names, for formats that reference installed fonts (DOCX). */
+export const FONT_FAMILIES: Record<string, string> = {
+    Inter: 'Inter',
+    'IBM Plex Sans': 'IBM Plex Sans',
+    'Source Serif': 'Source Serif 4',
+    Lora: 'Lora',
 }
 
 export function fontStack(name: string): string {

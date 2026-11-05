@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { getDb, schema } from '#/db'
 import { cvDocSchema, emptyDoc } from '#/cv/schema'
 import { sampleDoc } from '#/cv/sample'
-import { DEFAULT_THEME_ID } from '#/themes'
+import { DEFAULT_THEME_ID, THEMES } from '#/themes'
 import { themeOverridesSchema } from '#/themes/types'
 
 const { variants, snapshots, exportsTable } = schema
@@ -87,6 +87,10 @@ export const updateVariant = createServerFn({ method: 'POST' })
             name: z.string().trim().min(1).max(100).optional(),
             doc: cvDocSchema.optional(),
             themeOverrides: themeOverridesSchema.optional(),
+            themeId: z
+                .string()
+                .refine((id) => id in THEMES, 'Unknown theme')
+                .optional(),
         }),
     )
     .handler(async ({ data }) => {

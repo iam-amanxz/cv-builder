@@ -4,21 +4,11 @@ import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import { getDb, schema } from '#/db'
 import { cvDocSchema } from '#/cv/schema'
-import { getTheme } from '#/themes'
+import { overridesFor } from '#/themes'
 import { createSnapshot } from './snapshots.server'
-import type { ThemeOverrides, ThemeTokens } from '#/themes'
+import type { ThemeOverrides } from '#/themes'
 
 const { variants, snapshots, exportsTable } = schema
-
-/** Turn resolved tokens back into overrides relative to the theme's defaults. */
-function overridesFrom(themeId: string, tokens: ThemeTokens): ThemeOverrides {
-    const defaults = getTheme(themeId).defaults
-    const out: Record<string, unknown> = {}
-    for (const k of Object.keys(tokens) as (keyof ThemeTokens)[]) {
-        if (tokens[k] !== defaults[k]) out[k] = tokens[k]
-    }
-    return out
-}
 
 export const listSnapshots = createServerFn({ method: 'GET' })
     .validator(z.object({ variantId: z.string() }))
@@ -84,7 +74,7 @@ export const restoreSnapshot = createServerFn({ method: 'POST' })
                 .set({
                     doc: cvDocSchema.parse(snap.doc),
                     themeId: snap.themeId,
-                    themeOverrides: overridesFrom(snap.themeId, snap.themeTokens),
+                    themeOverrides: overridesFor(snap.themeId, snap.themeTokens),
                     updatedAt: new Date(),
                 })
                 .where(eq(variants.id, snap.variantId))
@@ -117,7 +107,7 @@ export const forkVariant = createServerFn({ method: 'POST' })
                 parentId: s.variantId,
                 doc: s.doc,
                 themeId: s.themeId,
-                themeOverrides: overridesFrom(s.themeId, s.themeTokens),
+                themeOverrides: overridesFor(s.themeId, s.themeTokens),
             }
         } else if (data.variantId) {
             const v = db
