@@ -39,7 +39,8 @@ export async function runStructured<TSchema extends z.ZodType>(opts: {
     kind: AiKind
     variantId?: string
     system: string
-    prompt: string
+    /** Plain text, or content blocks (e.g. a PDF document followed by text). */
+    prompt: string | Anthropic.Beta.BetaContentBlockParam[]
     output: TSchema
     effort?: 'low' | 'medium' | 'high'
     logInput: unknown

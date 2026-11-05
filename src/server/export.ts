@@ -39,7 +39,7 @@ async function render(format: ExportFormat, snapshotId: string, doc: CvDoc, toke
     switch (format) {
         case 'pdf': {
             const { renderPdf } = await import('./pdf.server')
-            return renderPdf(snapshotId)
+            return renderPdf(`/print/${snapshotId}`)
         }
         case 'docx': {
             const { renderDocx } = await import('#/export/docx.server')

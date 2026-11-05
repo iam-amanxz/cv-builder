@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
+import { listLetters } from '#/server/letters'
 import { aiStatus, aiUsage } from '#/ai/tasks'
 import { listPresets } from '#/server/themes'
 import { listSnapshots } from '#/server/history'
@@ -42,3 +43,6 @@ export const aiStatusQuery = () =>
     queryOptions({ queryKey: ['ai-status'], queryFn: () => aiStatus(), staleTime: 60_000 })
 
 export const aiUsageQuery = () => queryOptions({ queryKey: ['ai-usage'], queryFn: () => aiUsage() })
+
+export const lettersQuery = (variantId: string) =>
+    queryOptions({ queryKey: ['letters', variantId], queryFn: () => listLetters({ data: { variantId } }) })

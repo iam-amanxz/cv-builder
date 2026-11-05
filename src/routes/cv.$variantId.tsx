@@ -8,6 +8,7 @@ import {
     FileDown,
     History,
     Loader2,
+    Mail,
     Save,
     Sparkles,
     TriangleAlert,
@@ -162,6 +163,10 @@ function EditorPage() {
         await flush().catch(() => {})
         navigate({ to: '/cv/$variantId/tailor', params: { variantId } })
     }
+    const openLetters = async () => {
+        await flush().catch(() => {})
+        navigate({ to: '/cv/$variantId/letters', params: { variantId } })
+    }
     const openHistory = async () => {
         await flush().catch(() => {})
         navigate({ to: '/cv/$variantId/history', params: { variantId } })
@@ -203,6 +208,9 @@ function EditorPage() {
                     {version.isSuccess && <span className="text-xs text-emerald-700">Version saved</span>}
                     <Button variant="ghost" className="text-violet-700" onClick={() => void openTailor()}>
                         <Sparkles /> Tailor to job
+                    </Button>
+                    <Button variant="ghost" onClick={() => void openLetters()}>
+                        <Mail /> Letters
                     </Button>
                     <Button variant="ghost" onClick={() => void openHistory()}>
                         <History /> History

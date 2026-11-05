@@ -10,16 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ImportRouteImport } from './routes/import'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CvVariantIdRouteImport } from './routes/cv.$variantId'
 import { Route as PrintSnapshotIdRouteImport } from './routes/print.$snapshotId'
 import { Route as ApiExportsExportIdRouteImport } from './routes/api.exports.$exportId'
 import { Route as CvVariantIdHistoryRouteImport } from './routes/cv.$variantId_.history'
+import { Route as CvVariantIdLettersRouteImport } from './routes/cv.$variantId_.letters'
 import { Route as CvVariantIdTailorRouteImport } from './routes/cv.$variantId_.tailor'
+import { Route as PrintLetterLetterIdRouteImport } from './routes/print.letter.$letterId'
+import { Route as ApiLettersLetterIdPdfRouteImport } from './routes/api.letters.$letterId.pdf'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportRoute = ImportRouteImport.update({
+  id: '/import',
+  path: '/import',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -47,78 +56,121 @@ const CvVariantIdHistoryRoute = CvVariantIdHistoryRouteImport.update({
   path: '/cv/$variantId/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvVariantIdLettersRoute = CvVariantIdLettersRouteImport.update({
+  id: '/cv/$variantId_/letters',
+  path: '/cv/$variantId/letters',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CvVariantIdTailorRoute = CvVariantIdTailorRouteImport.update({
   id: '/cv/$variantId_/tailor',
   path: '/cv/$variantId/tailor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrintLetterLetterIdRoute = PrintLetterLetterIdRouteImport.update({
+  id: '/print/letter/$letterId',
+  path: '/print/letter/$letterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLettersLetterIdPdfRoute = ApiLettersLetterIdPdfRouteImport.update({
+  id: '/api/letters/$letterId/pdf',
+  path: '/api/letters/$letterId/pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
+  '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
+  '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId_/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId_/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId_/tailor': typeof CvVariantIdTailorRoute
+  '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/import'
     | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
+    | '/print/letter/$letterId'
+    | '/api/letters/$letterId/pdf'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/import'
     | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
+    | '/print/letter/$letterId'
+    | '/api/letters/$letterId/pdf'
   id:
     | '__root__'
     | '/'
+    | '/import'
     | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId_/history'
+    | '/cv/$variantId_/letters'
     | '/cv/$variantId_/tailor'
+    | '/print/letter/$letterId'
+    | '/api/letters/$letterId/pdf'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImportRoute: typeof ImportRoute
   SettingsRoute: typeof SettingsRoute
   CvVariantIdRoute: typeof CvVariantIdRoute
   PrintSnapshotIdRoute: typeof PrintSnapshotIdRoute
   ApiExportsExportIdRoute: typeof ApiExportsExportIdRoute
   CvVariantIdHistoryRoute: typeof CvVariantIdHistoryRoute
+  CvVariantIdLettersRoute: typeof CvVariantIdLettersRoute
   CvVariantIdTailorRoute: typeof CvVariantIdTailorRoute
+  PrintLetterLetterIdRoute: typeof PrintLetterLetterIdRoute
+  ApiLettersLetterIdPdfRoute: typeof ApiLettersLetterIdPdfRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import': {
+      id: '/import'
+      path: '/import'
+      fullPath: '/import'
+      preLoaderRoute: typeof ImportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -165,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvVariantIdHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv/$variantId_/letters': {
+      id: '/cv/$variantId_/letters'
+      path: '/cv/$variantId/letters'
+      fullPath: '/cv/$variantId/letters'
+      preLoaderRoute: typeof CvVariantIdLettersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cv/$variantId_/tailor': {
       id: '/cv/$variantId_/tailor'
       path: '/cv/$variantId/tailor'
@@ -172,17 +238,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvVariantIdTailorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/print/letter/$letterId': {
+      id: '/print/letter/$letterId'
+      path: '/print/letter/$letterId'
+      fullPath: '/print/letter/$letterId'
+      preLoaderRoute: typeof PrintLetterLetterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/letters/$letterId/pdf': {
+      id: '/api/letters/$letterId/pdf'
+      path: '/api/letters/$letterId/pdf'
+      fullPath: '/api/letters/$letterId/pdf'
+      preLoaderRoute: typeof ApiLettersLetterIdPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImportRoute: ImportRoute,
   SettingsRoute: SettingsRoute,
   CvVariantIdRoute: CvVariantIdRoute,
   PrintSnapshotIdRoute: PrintSnapshotIdRoute,
   ApiExportsExportIdRoute: ApiExportsExportIdRoute,
   CvVariantIdHistoryRoute: CvVariantIdHistoryRoute,
+  CvVariantIdLettersRoute: CvVariantIdLettersRoute,
   CvVariantIdTailorRoute: CvVariantIdTailorRoute,
+  PrintLetterLetterIdRoute: PrintLetterLetterIdRoute,
+  ApiLettersLetterIdPdfRoute: ApiLettersLetterIdPdfRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -91,3 +91,22 @@ export const aiRuns = sqliteTable(
     },
     (t) => [index('ai_runs_created_idx').on(t.createdAt)],
 )
+
+/** Cover letters belong to a CV and borrow its theme for rendering. */
+export const coverLetters = sqliteTable(
+    'cover_letters',
+    {
+        id: text('id').primaryKey(),
+        variantId: text('variant_id')
+            .notNull()
+            .references(() => variants.id),
+        company: text('company').notNull().default(''),
+        role: text('role').notNull().default(''),
+        recipient: text('recipient').notNull().default(''),
+        jobDescription: text('job_description').notNull().default(''),
+        body: text('body').notNull().default(''),
+        createdAt: createdAt(),
+        updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+    },
+    (t) => [index('cover_letters_variant_idx').on(t.variantId)],
+)

@@ -28,12 +28,13 @@ export function internalBaseUrl(): string {
     return process.env.APP_INTERNAL_URL ?? `http://localhost:${process.env.PORT ?? 3000}`
 }
 
-export async function renderPdf(snapshotId: string): Promise<Buffer> {
+/** Render a page of this app (e.g. `/print/<snapshotId>`) to PDF. */
+export async function renderPdf(pagePath: string): Promise<Buffer> {
     const b = await browser()
     const context = await b.newContext()
     const page = await context.newPage()
     try {
-        const res = await page.goto(`${internalBaseUrl()}/print/${snapshotId}`, {
+        const res = await page.goto(`${internalBaseUrl()}${pagePath}`, {
             waitUntil: 'load',
             timeout: 30_000,
         })
