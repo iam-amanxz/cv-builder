@@ -1,11 +1,22 @@
 # CV Builder
 
-Personal CV tool: structured content, themes, versioned PDF exports. Plan: [PLAN.md](PLAN.md).
+Personal CV tool: structured content, themes, every version kept, PDF/Word export, AI help. Plan: [PLAN.md](PLAN.md) (all six phases built).
+
+## Features
+
+- **Editor** with autosave, custom sections, reorder/hide; live A4/Letter preview with page breaks and an overflow warning + **Fit to page**
+- **Themes**: Classic, Modern (two-column), Minimal, Compact; full token editor; saved "My themes"
+- **Export**: PDF (pixel-identical to preview), Word (single-column, ATS-safe), Markdown, JSON Resume — every export is kept and linked to a frozen version
+- **History**: saved versions, preview any version, field-level diff, restore (undoable), copy to a new CV
+- **AI** (Claude): bullet coach, summary suggestions, tailor-to-job with match score and selectable edits, cover letters, import from PDF/Word/text. Every AI change snapshots first; usage and cost on the Settings page
+- **ATS check**: renders the PDF and reads it back like a parser (contact, headings, reading order)
+- **Applications** board linking each application to the exact file and letter sent
+- **Bullet bank** across all CVs and versions; **backup/restore** as a zip
 
 ## Run (Docker)
 
 ```sh
-cp .env.example .env        # optional until AI features land
+cp .env.example .env        # add ANTHROPIC_API_KEY to enable AI features (optional)
 docker compose up -d --build
 open http://localhost:3000
 ```
