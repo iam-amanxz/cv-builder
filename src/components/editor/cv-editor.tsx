@@ -7,6 +7,7 @@ import { Input } from '#/components/ui/input'
 import { cn } from '#/lib/utils'
 import { Field } from './fields'
 import { BulletCoach, SummaryHelper } from '#/components/ai/inline-helpers'
+import { BulletBankPicker } from './bullet-bank'
 import { defFor, itemsOf } from './section-config'
 import type { CvDoc } from '#/cv/schema'
 import type { AnyItem } from './section-config'
@@ -369,6 +370,18 @@ function ItemList({ doc, sectionKey, mutate }: { doc: CvDoc; sectionKey: string;
                                 onApply={(next) =>
                                     edit((a) => {
                                         a[i].highlights = next
+                                    })
+                                }
+                            />
+                        )}
+                        {COACHED.has(sectionKey) && (
+                            <BulletBankPicker
+                                current={(item.highlights as string[] | undefined) ?? []}
+                                onAdd={(text) =>
+                                    edit((a) => {
+                                        const hs = [...((a[i].highlights as string[] | undefined) ?? [])]
+                                        while (hs.length && !hs[hs.length - 1].trim()) hs.pop()
+                                        a[i].highlights = [...hs, text]
                                     })
                                 }
                             />

@@ -30,4 +30,15 @@ export function getDb(): Db {
     return g.__cvDb
 }
 
+export const DB_PATH = path.join(DATA_DIR, 'cv.db')
+
+/** Checkpoint and close the connection (used by restore); the next getDb() reopens. */
+export function closeDb(): void {
+    const db = g.__cvDb
+    if (!db) return
+    db.$client.pragma('wal_checkpoint(TRUNCATE)')
+    db.$client.close()
+    g.__cvDb = undefined
+}
+
 export { schema }

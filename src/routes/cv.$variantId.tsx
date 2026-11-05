@@ -9,7 +9,9 @@ import {
     History,
     Loader2,
     Mail,
+    Minimize2,
     Save,
+    ScanText,
     Sparkles,
     TriangleAlert,
 } from 'lucide-react'
@@ -33,6 +35,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
+import { tightenStep } from '#/components/editor/fit'
+import { AtsPanel } from '#/components/editor/ats-panel'
 import type { PageLayout } from '#/components/editor/preview'
 import type { ExportFormat } from '#/server/export'
 import { LocalTime } from '#/components/local-time'
@@ -124,6 +128,33 @@ function EditorPage() {
 
     const tokens = useMemo(() => resolveTokens(themeId, overrides), [themeId, overrides])
 
+    // Fit to page: tighten one step at a time, letting the preview re-measure
+    // between steps, until the page count drops to the target.
+    const [fitTarget, setFitTarget] = useState<number | null>(null)
+    const [fitMsg, setFitMsg] = useState('')
+    const layoutRef = useRef(layout)
+    layoutRef.current = layout
+    useEffect(() => {
+        if (fitTarget === null) return
+        const t = setTimeout(() => {
+            if (layoutRef.current.pages <= fitTarget) {
+                setFitTarget(null)
+                setFitMsg(`Fits on ${fitTarget} page${fitTarget > 1 ? 's' : ''}`)
+                return
+            }
+            const next = tightenStep(tokens, overrides)
+            if (!next) {
+                setFitTarget(null)
+                setFitMsg('Could not fit by spacing alone — hide or shorten an entry')
+                return
+            }
+            setOverrides(next)
+            schedule({ themeOverrides: next })
+        }, 80)
+        return () => clearTimeout(t)
+    }, [fitTarget, tokens, overrides, schedule])
+    const [atsOpen, setAtsOpen] = useState(false)
+
     const exportsList = useSuspenseQuery(exportsQuery(variantId))
     const pdf = useMutation({
         mutationFn: async (format: ExportFormat) => {
@@ -200,12 +231,31 @@ function EditorPage() {
                             Spills onto page {layout.pages} by ~{layout.spillLines} line
                             {layout.spillLines > 1 ? 's' : ''}
                         </span>
-                    ) : (
+                    ) : null}
+                    {layout.spillLines > 0 && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={fitTarget !== null}
+                            onClick={() => {
+                                setFitMsg('')
+                                setFitTarget(layout.pages - 1)
+                            }}
+                        >
+                            {fitTarget !== null ? <Loader2 className="animate-spin" /> : <Minimize2 />}
+                            Fit to {layout.pages - 1} page{layout.pages - 1 > 1 ? 's' : ''}
+                        </Button>
+                    )}
+                    {layout.spillLines > 0 ? null : (
                         <span className="text-muted-foreground text-xs">
                             {layout.pages} page{layout.pages > 1 ? 's' : ''}
                         </span>
                     )}
+                    {fitMsg && fitTarget === null && <span className="text-muted-foreground text-xs">{fitMsg}</span>}
                     {version.isSuccess && <span className="text-xs text-emerald-700">Version saved</span>}
+                    <Button variant="ghost" onClick={() => setAtsOpen((o) => !o)}>
+                        <ScanText /> ATS check
+                    </Button>
                     <Button variant="ghost" className="text-violet-700" onClick={() => void openTailor()}>
                         <Sparkles /> Tailor to job
                     </Button>
@@ -265,7 +315,10 @@ function EditorPage() {
                 </div>
             )}
 
-            <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(420px,560px)_1fr]">
+            <div className="relative grid min-h-0 flex-1 lg:grid-cols-[minmax(420px,560px)_1fr]">
+                {atsOpen && (
+                    <AtsPanel variantId={variantId} beforeRun={() => flush()} onClose={() => setAtsOpen(false)} />
+                )}
                 <aside className="min-h-0 overflow-y-auto border-r p-4">
                     <AiProvider value={aiCtx}>
                         <CvEditor doc={doc} mutate={mutate} />

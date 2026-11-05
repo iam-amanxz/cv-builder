@@ -4,6 +4,7 @@ import { ArrowLeft, CheckCircle2, CircleAlert } from 'lucide-react'
 import { aiStatusQuery, aiUsageQuery } from '#/cv/queries'
 import { Button } from '#/components/ui/button'
 import { LocalTime } from '#/components/local-time'
+import { BackupSection } from '#/components/backup-section'
 import { cn } from '#/lib/utils'
 
 export const Route = createFileRoute('/settings')({
@@ -54,6 +55,8 @@ function SettingsPage() {
                     </div>
                 </div>
             </section>
+
+            <BackupSection />
 
             <section className="space-y-3">
                 <h2 className="font-medium">AI usage</h2>

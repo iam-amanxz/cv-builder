@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { APPLICATION_STATUSES } from '#/cv/applications'
 import type { CvDoc } from '#/cv/schema'
 import type { ThemeOverrides, ThemeTokens } from '#/themes/types'
 
@@ -109,4 +110,24 @@ export const coverLetters = sqliteTable(
         updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
     },
     (t) => [index('cover_letters_variant_idx').on(t.variantId)],
+)
+
+/** A job application, linked to the exact export (snapshot) that was sent. */
+export const applications = sqliteTable(
+    'applications',
+    {
+        id: text('id').primaryKey(),
+        company: text('company').notNull(),
+        role: text('role').notNull().default(''),
+        url: text('url').notNull().default(''),
+        variantId: text('variant_id').references(() => variants.id),
+        exportId: text('export_id').references(() => exportsTable.id),
+        letterId: text('letter_id').references(() => coverLetters.id, { onDelete: 'set null' }),
+        status: text('status', { enum: APPLICATION_STATUSES }).notNull().default('draft'),
+        appliedAt: text('applied_at').notNull().default(''),
+        notes: text('notes').notNull().default(''),
+        createdAt: createdAt(),
+        updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+    },
+    (t) => [index('applications_status_idx').on(t.status)],
 )

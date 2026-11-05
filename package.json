@@ -38,6 +38,7 @@
         "clsx": "^2.1.1",
         "docx": "^9.15.2",
         "drizzle-orm": "^0.45.4",
+        "fflate": "^0.8.3",
         "lucide-react": "^0.577.0",
         "mammoth": "^1.13.0",
         "nanoid": "^6.0.2",
@@ -49,6 +50,7 @@
         "tailwind-merge": "^3.0.2",
         "tailwindcss": "^4.1.18",
         "tw-animate-css": "^1.3.6",
+        "unpdf": "^2.1.0",
         "zod": "^4.3.6"
     },
     "devDependencies": {

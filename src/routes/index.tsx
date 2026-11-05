@@ -1,7 +1,7 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Copy, FileText, FileUp, Plus, Settings, Star, Trash2 } from 'lucide-react'
+import { Briefcase, Copy, FileText, FileUp, Plus, Settings, Star, Trash2 } from 'lucide-react'
 import { variantsQuery } from '#/cv/queries'
 import { archiveVariant, createVariant } from '#/server/variants'
 import { forkVariant } from '#/server/history'
@@ -49,6 +49,11 @@ function Dashboard() {
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold tracking-tight">Your CVs</h1>
                 <Button asChild variant="ghost" size="sm" className="ml-auto">
+                    <Link to="/applications">
+                        <Briefcase /> Applications
+                    </Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm">
                     <Link to="/import">
                         <FileUp /> Import
                     </Link>

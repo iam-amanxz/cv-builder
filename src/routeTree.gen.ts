@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as ImportRouteImport } from './routes/import'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ApiBackupRouteImport } from './routes/api.backup'
 import { Route as CvVariantIdRouteImport } from './routes/cv.$variantId'
 import { Route as PrintSnapshotIdRouteImport } from './routes/print.$snapshotId'
 import { Route as ApiExportsExportIdRouteImport } from './routes/api.exports.$exportId'
@@ -19,11 +21,17 @@ import { Route as CvVariantIdHistoryRouteImport } from './routes/cv.$variantId_.
 import { Route as CvVariantIdLettersRouteImport } from './routes/cv.$variantId_.letters'
 import { Route as CvVariantIdTailorRouteImport } from './routes/cv.$variantId_.tailor'
 import { Route as PrintLetterLetterIdRouteImport } from './routes/print.letter.$letterId'
+import { Route as PrintLiveVariantIdRouteImport } from './routes/print.live.$variantId'
 import { Route as ApiLettersLetterIdPdfRouteImport } from './routes/api.letters.$letterId.pdf'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportRoute = ImportRouteImport.update({
@@ -34,6 +42,11 @@ const ImportRoute = ImportRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBackupRoute = ApiBackupRouteImport.update({
+  id: '/api/backup',
+  path: '/api/backup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CvVariantIdRoute = CvVariantIdRouteImport.update({
@@ -71,6 +84,11 @@ const PrintLetterLetterIdRoute = PrintLetterLetterIdRouteImport.update({
   path: '/print/letter/$letterId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrintLiveVariantIdRoute = PrintLiveVariantIdRouteImport.update({
+  id: '/print/live/$variantId',
+  path: '/print/live/$variantId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiLettersLetterIdPdfRoute = ApiLettersLetterIdPdfRouteImport.update({
   id: '/api/letters/$letterId/pdf',
   path: '/api/letters/$letterId/pdf',
@@ -79,8 +97,10 @@ const ApiLettersLetterIdPdfRoute = ApiLettersLetterIdPdfRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
+  '/api/backup': typeof ApiBackupRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
@@ -88,12 +108,15 @@ export interface FileRoutesByFullPath {
   '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/print/live/$variantId': typeof PrintLiveVariantIdRoute
   '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
+  '/api/backup': typeof ApiBackupRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
@@ -101,13 +124,16 @@ export interface FileRoutesByTo {
   '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/print/live/$variantId': typeof PrintLiveVariantIdRoute
   '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
+  '/api/backup': typeof ApiBackupRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
@@ -115,14 +141,17 @@ export interface FileRoutesById {
   '/cv/$variantId_/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId_/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
+  '/print/live/$variantId': typeof PrintLiveVariantIdRoute
   '/api/letters/$letterId/pdf': typeof ApiLettersLetterIdPdfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/applications'
     | '/import'
     | '/settings'
+    | '/api/backup'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
@@ -130,12 +159,15 @@ export interface FileRouteTypes {
     | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
     | '/print/letter/$letterId'
+    | '/print/live/$variantId'
     | '/api/letters/$letterId/pdf'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/applications'
     | '/import'
     | '/settings'
+    | '/api/backup'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
@@ -143,12 +175,15 @@ export interface FileRouteTypes {
     | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
     | '/print/letter/$letterId'
+    | '/print/live/$variantId'
     | '/api/letters/$letterId/pdf'
   id:
     | '__root__'
     | '/'
+    | '/applications'
     | '/import'
     | '/settings'
+    | '/api/backup'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
@@ -156,13 +191,16 @@ export interface FileRouteTypes {
     | '/cv/$variantId_/letters'
     | '/cv/$variantId_/tailor'
     | '/print/letter/$letterId'
+    | '/print/live/$variantId'
     | '/api/letters/$letterId/pdf'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApplicationsRoute: typeof ApplicationsRoute
   ImportRoute: typeof ImportRoute
   SettingsRoute: typeof SettingsRoute
+  ApiBackupRoute: typeof ApiBackupRoute
   CvVariantIdRoute: typeof CvVariantIdRoute
   PrintSnapshotIdRoute: typeof PrintSnapshotIdRoute
   ApiExportsExportIdRoute: typeof ApiExportsExportIdRoute
@@ -170,6 +208,7 @@ export interface RootRouteChildren {
   CvVariantIdLettersRoute: typeof CvVariantIdLettersRoute
   CvVariantIdTailorRoute: typeof CvVariantIdTailorRoute
   PrintLetterLetterIdRoute: typeof PrintLetterLetterIdRoute
+  PrintLiveVariantIdRoute: typeof PrintLiveVariantIdRoute
   ApiLettersLetterIdPdfRoute: typeof ApiLettersLetterIdPdfRoute
 }
 
@@ -180,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import': {
@@ -194,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/backup': {
+      id: '/api/backup'
+      path: '/api/backup'
+      fullPath: '/api/backup'
+      preLoaderRoute: typeof ApiBackupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cv/$variantId': {
@@ -245,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrintLetterLetterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/print/live/$variantId': {
+      id: '/print/live/$variantId'
+      path: '/print/live/$variantId'
+      fullPath: '/print/live/$variantId'
+      preLoaderRoute: typeof PrintLiveVariantIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/letters/$letterId/pdf': {
       id: '/api/letters/$letterId/pdf'
       path: '/api/letters/$letterId/pdf'
@@ -257,8 +317,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApplicationsRoute: ApplicationsRoute,
   ImportRoute: ImportRoute,
   SettingsRoute: SettingsRoute,
+  ApiBackupRoute: ApiBackupRoute,
   CvVariantIdRoute: CvVariantIdRoute,
   PrintSnapshotIdRoute: PrintSnapshotIdRoute,
   ApiExportsExportIdRoute: ApiExportsExportIdRoute,
@@ -266,6 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   CvVariantIdLettersRoute: CvVariantIdLettersRoute,
   CvVariantIdTailorRoute: CvVariantIdTailorRoute,
   PrintLetterLetterIdRoute: PrintLetterLetterIdRoute,
+  PrintLiveVariantIdRoute: PrintLiveVariantIdRoute,
   ApiLettersLetterIdPdfRoute: ApiLettersLetterIdPdfRoute,
 }
 export const routeTree = rootRouteImport
