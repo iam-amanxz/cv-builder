@@ -6,9 +6,14 @@ import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { cn } from '#/lib/utils'
 import { Field } from './fields'
+import { BulletCoach, SummaryHelper } from '#/components/ai/inline-helpers'
 import { defFor, itemsOf } from './section-config'
 import type { CvDoc } from '#/cv/schema'
 import type { AnyItem } from './section-config'
+
+/** Sections whose items have bullet highlights worth coaching. */
+const COACHED = new Set(['work', 'projects', 'education'])
+const str = (v: unknown) => (typeof v === 'string' ? v : '')
 
 export type Mutate = (fn: (draft: CvDoc) => void) => void
 
@@ -273,6 +278,14 @@ function SectionCard({
                             })
                         }
                     />
+                    <SummaryHelper
+                        doc={doc}
+                        onApply={(text) =>
+                            mutate((d) => {
+                                d.basics.summary = text
+                            })
+                        }
+                    />
                 </div>
             ) : (
                 <ItemList doc={doc} sectionKey={sectionKey} mutate={mutate} />
@@ -348,6 +361,18 @@ function ItemList({ doc, sectionKey, mutate }: { doc: CvDoc; sectionKey: string;
                                 }
                             />
                         ))}
+                        {COACHED.has(sectionKey) && (
+                            <BulletCoach
+                                role={str(item.position) || str(item.studyType) || str(item.name)}
+                                organisation={str(item.name) || str(item.institution)}
+                                highlights={(item.highlights as string[] | undefined) ?? []}
+                                onApply={(next) =>
+                                    edit((a) => {
+                                        a[i].highlights = next
+                                    })
+                                }
+                            />
+                        )}
                     </div>
                 </Card>
             ))}

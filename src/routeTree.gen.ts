@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CvVariantIdRouteImport } from './routes/cv.$variantId'
 import { Route as PrintSnapshotIdRouteImport } from './routes/print.$snapshotId'
 import { Route as ApiExportsExportIdRouteImport } from './routes/api.exports.$exportId'
 import { Route as CvVariantIdHistoryRouteImport } from './routes/cv.$variantId_.history'
+import { Route as CvVariantIdTailorRouteImport } from './routes/cv.$variantId_.tailor'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CvVariantIdRoute = CvVariantIdRouteImport.update({
@@ -40,59 +47,78 @@ const CvVariantIdHistoryRoute = CvVariantIdHistoryRouteImport.update({
   path: '/cv/$variantId/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvVariantIdTailorRoute = CvVariantIdTailorRouteImport.update({
+  id: '/cv/$variantId_/tailor',
+  path: '/cv/$variantId/tailor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/cv/$variantId': typeof CvVariantIdRoute
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId_/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId_/tailor': typeof CvVariantIdTailorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/tailor'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/tailor'
   id:
     | '__root__'
     | '/'
+    | '/settings'
     | '/cv/$variantId'
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId_/history'
+    | '/cv/$variantId_/tailor'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SettingsRoute: typeof SettingsRoute
   CvVariantIdRoute: typeof CvVariantIdRoute
   PrintSnapshotIdRoute: typeof PrintSnapshotIdRoute
   ApiExportsExportIdRoute: typeof ApiExportsExportIdRoute
   CvVariantIdHistoryRoute: typeof CvVariantIdHistoryRoute
+  CvVariantIdTailorRoute: typeof CvVariantIdTailorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -102,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cv/$variantId': {
@@ -132,15 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvVariantIdHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv/$variantId_/tailor': {
+      id: '/cv/$variantId_/tailor'
+      path: '/cv/$variantId/tailor'
+      fullPath: '/cv/$variantId/tailor'
+      preLoaderRoute: typeof CvVariantIdTailorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SettingsRoute: SettingsRoute,
   CvVariantIdRoute: CvVariantIdRoute,
   PrintSnapshotIdRoute: PrintSnapshotIdRoute,
   ApiExportsExportIdRoute: ApiExportsExportIdRoute,
   CvVariantIdHistoryRoute: CvVariantIdHistoryRoute,
+  CvVariantIdTailorRoute: CvVariantIdTailorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

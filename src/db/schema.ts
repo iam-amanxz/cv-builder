@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import type { CvDoc } from '#/cv/schema'
 import type { ThemeOverrides, ThemeTokens } from '#/themes/types'
 
@@ -70,3 +70,24 @@ export const themePresets = sqliteTable('theme_presets', {
     tokens: text('tokens', { mode: 'json' }).$type<ThemeTokens>().notNull(),
     createdAt: createdAt(),
 })
+
+/** Every AI call: what was asked, what came back, and what it cost. */
+export const aiRuns = sqliteTable(
+    'ai_runs',
+    {
+        id: text('id').primaryKey(),
+        kind: text('kind', { enum: ['bullets', 'tailor', 'summary', 'import', 'cover-letter'] }).notNull(),
+        variantId: text('variant_id'),
+        model: text('model').notNull(),
+        status: text('status', { enum: ['ok', 'error', 'refusal'] }).notNull(),
+        input: text('input', { mode: 'json' }).$type<unknown>().notNull(),
+        output: text('output', { mode: 'json' }).$type<unknown>(),
+        error: text('error'),
+        inputTokens: integer('input_tokens').notNull().default(0),
+        outputTokens: integer('output_tokens').notNull().default(0),
+        costUsd: real('cost_usd'),
+        durationMs: integer('duration_ms').notNull().default(0),
+        createdAt: createdAt(),
+    },
+    (t) => [index('ai_runs_created_idx').on(t.createdAt)],
+)

@@ -1,11 +1,23 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, ChevronDown, Download, FileDown, History, Loader2, Save, TriangleAlert } from 'lucide-react'
-import { exportsQuery, variantQuery } from '#/cv/queries'
+import {
+    ArrowLeft,
+    ChevronDown,
+    Download,
+    FileDown,
+    History,
+    Loader2,
+    Save,
+    Sparkles,
+    TriangleAlert,
+} from 'lucide-react'
+import { aiStatusQuery, exportsQuery, variantQuery } from '#/cv/queries'
 import { updateVariant } from '#/server/variants'
 import { exportFile } from '#/server/export'
 import { saveVersion } from '#/server/history'
+import { snapshotBeforeAi } from '#/ai/tasks'
+import { AiProvider } from '#/components/ai/ai-context'
 import { resolveTokens } from '#/themes'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
@@ -132,6 +144,24 @@ function EditorPage() {
         },
         onSuccess: () => qc.invalidateQueries({ queryKey: ['snapshots', variantId] }),
     })
+    const aiStatus = useQuery(aiStatusQuery())
+    const aiCtx = useMemo(
+        () => ({
+            variantId,
+            enabled: aiStatus.data?.configured ?? false,
+            model: aiStatus.data?.model ?? '',
+            beforeApply: async (label: string) => {
+                await flush()
+                await snapshotBeforeAi({ data: { variantId, label } })
+                void qc.invalidateQueries({ queryKey: ['snapshots', variantId] })
+            },
+        }),
+        [variantId, aiStatus.data, flush, qc],
+    )
+    const openTailor = async () => {
+        await flush().catch(() => {})
+        navigate({ to: '/cv/$variantId/tailor', params: { variantId } })
+    }
     const openHistory = async () => {
         await flush().catch(() => {})
         navigate({ to: '/cv/$variantId/history', params: { variantId } })
@@ -171,6 +201,9 @@ function EditorPage() {
                         </span>
                     )}
                     {version.isSuccess && <span className="text-xs text-emerald-700">Version saved</span>}
+                    <Button variant="ghost" className="text-violet-700" onClick={() => void openTailor()}>
+                        <Sparkles /> Tailor to job
+                    </Button>
                     <Button variant="ghost" onClick={() => void openHistory()}>
                         <History /> History
                     </Button>
@@ -226,7 +259,9 @@ function EditorPage() {
 
             <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(420px,560px)_1fr]">
                 <aside className="min-h-0 overflow-y-auto border-r p-4">
-                    <CvEditor doc={doc} mutate={mutate} />
+                    <AiProvider value={aiCtx}>
+                        <CvEditor doc={doc} mutate={mutate} />
+                    </AiProvider>
                     <ExportHistory items={exportsList.data} />
                 </aside>
                 <section className="flex min-h-0 flex-col bg-muted/60">

@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
+import { aiStatus, aiUsage } from '#/ai/tasks'
 import { listPresets } from '#/server/themes'
 import { listSnapshots } from '#/server/history'
 import { getSnapshot } from '#/server/export'
@@ -36,3 +37,8 @@ export const snapshotQuery = (id: string) =>
     })
 
 export const presetsQuery = () => queryOptions({ queryKey: ['presets'], queryFn: () => listPresets() })
+
+export const aiStatusQuery = () =>
+    queryOptions({ queryKey: ['ai-status'], queryFn: () => aiStatus(), staleTime: 60_000 })
+
+export const aiUsageQuery = () => queryOptions({ queryKey: ['ai-usage'], queryFn: () => aiUsage() })

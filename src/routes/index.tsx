@@ -1,7 +1,7 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Copy, FileText, Plus, Star, Trash2 } from 'lucide-react'
+import { Copy, FileText, Plus, Settings, Star, Trash2 } from 'lucide-react'
 import { variantsQuery } from '#/cv/queries'
 import { archiveVariant, createVariant } from '#/server/variants'
 import { forkVariant } from '#/server/history'
@@ -46,7 +46,14 @@ function Dashboard() {
 
     return (
         <main className="mx-auto max-w-4xl px-4 py-10">
-            <h1 className="text-2xl font-semibold tracking-tight">Your CVs</h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-semibold tracking-tight">Your CVs</h1>
+                <Button asChild variant="ghost" size="sm">
+                    <Link to="/settings">
+                        <Settings /> Settings
+                    </Link>
+                </Button>
+            </div>
             <p className="text-muted-foreground mt-1 text-sm">
                 Each CV is an editable variant. Every export is saved as a frozen version.
             </p>
