@@ -1,0 +1,15 @@
+services:
+  cv:
+    build: .
+    image: cv-builder:local
+    container_name: cv-builder
+    ports:
+      - '127.0.0.1:3000:3000' # local only — there is no auth
+    volumes:
+      - ./data:/data # cv.db + exports/
+    env_file:
+      - path: .env
+        required: false
+    shm_size: 1gb # Chromium needs more than Docker's 64MB default
+    init: true
+    restart: unless-stopped
