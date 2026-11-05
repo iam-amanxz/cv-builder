@@ -44,6 +44,7 @@ export const FONT_STACKS: Record<string, string> = {
     'IBM Plex Sans': "'IBM Plex Sans', system-ui, sans-serif",
     'Source Serif': "'Source Serif 4', Georgia, serif",
     Lora: "'Lora', Georgia, serif",
+    Arial: "Arial, 'Liberation Sans', 'Helvetica Neue', Helvetica, 'Inter Variable', sans-serif",
 }
 
 /** Real family names, for formats that reference installed fonts (DOCX). */
@@ -52,6 +53,7 @@ export const FONT_FAMILIES: Record<string, string> = {
     'IBM Plex Sans': 'IBM Plex Sans',
     'Source Serif': 'Source Serif 4',
     Lora: 'Lora',
+    Arial: 'Arial',
 }
 
 export function fontStack(name: string): string {

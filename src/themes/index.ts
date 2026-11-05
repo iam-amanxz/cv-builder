@@ -1,3 +1,4 @@
+import { centeredTheme } from './centered'
 import { classicTheme } from './classic'
 import { compactTheme } from './compact'
 import { minimalTheme } from './minimal'
@@ -10,6 +11,7 @@ export const THEMES: Record<string, ThemeDef> = {
     [modernTheme.id]: modernTheme,
     [minimalTheme.id]: minimalTheme,
     [compactTheme.id]: compactTheme,
+    [centeredTheme.id]: centeredTheme,
 }
 
 export const DEFAULT_THEME_ID = classicTheme.id
