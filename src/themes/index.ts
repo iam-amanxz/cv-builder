@@ -7,17 +7,17 @@ import { PAGE_SIZES } from './types'
 import type { ThemeDef, ThemeOverrides, ThemeTokens } from './types'
 
 export const THEMES: Record<string, ThemeDef> = {
+    [centeredTheme.id]: centeredTheme,
     [classicTheme.id]: classicTheme,
     [modernTheme.id]: modernTheme,
     [minimalTheme.id]: minimalTheme,
     [compactTheme.id]: compactTheme,
-    [centeredTheme.id]: centeredTheme,
 }
 
-export const DEFAULT_THEME_ID = classicTheme.id
+export const DEFAULT_THEME_ID = centeredTheme.id
 
 export function getTheme(id: string): ThemeDef {
-    return THEMES[id] ?? classicTheme
+    return THEMES[id] ?? centeredTheme
 }
 
 export function resolveTokens(themeId: string, overrides: ThemeOverrides): ThemeTokens {
