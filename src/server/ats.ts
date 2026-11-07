@@ -22,6 +22,6 @@ export const atsCheck = createServerFn({ method: 'POST' })
         const pages = Array.isArray(text) ? text : [text]
         return {
             checks: runAtsChecks(cvDocSchema.parse(v.doc), pages, v.themeId),
-            text: pages.join('\n\n— page break —\n\n'),
+            text: pages.join('\n\n--- page break ---\n\n'),
         }
     })

@@ -47,7 +47,7 @@ function ImportPage() {
         },
         onSuccess: (r) => {
             setResult(r)
-            if (r.doc.basics.name) setName(`${r.doc.basics.name} — imported`)
+            if (r.doc.basics.name) setName(`${r.doc.basics.name} (imported)`)
         },
     })
 
@@ -95,7 +95,7 @@ function ImportPage() {
             <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(380px,480px)_1fr]">
                 <aside className="min-h-0 space-y-4 overflow-y-auto border-r p-4 text-sm">
                     <p className="text-muted-foreground">
-                        Upload an existing CV — PDF, Word (.docx), text, or a JSON Resume file. PDF, Word and text are
+                        Upload an existing CV: PDF, Word (.docx), text, or a JSON Resume file. PDF, Word and text are
                         read by AI ({status.data?.model ?? '…'}); JSON is mapped directly. Check the result before
                         saving: nothing is created until you click “Create CV”.
                     </p>
@@ -108,7 +108,7 @@ function ImportPage() {
                     <label className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed bg-card p-6 text-center hover:bg-muted/40">
                         <FileUp className="text-muted-foreground size-6" />
                         <span className="font-medium">{file ? file.name : 'Choose a file'}</span>
-                        <span className="text-muted-foreground text-xs">.pdf, .docx, .txt, .md, .json — max 10 MB</span>
+                        <span className="text-muted-foreground text-xs">.pdf, .docx, .txt, .md, .json, max 10 MB</span>
                         <input
                             type="file"
                             className="sr-only"
@@ -143,7 +143,7 @@ function ImportPage() {
                             Read {result.doc.work.length} positions, {result.doc.education.length} education entries,{' '}
                             {result.doc.skills.length} skill groups
                             {result.doc.custom.length ? ` and ${result.doc.custom.length} other sections` : ''}. Review
-                            the preview, then create the CV — you can edit everything afterwards.
+                            the preview, then create the CV. You can edit everything afterwards.
                         </p>
                     )}
                 </aside>

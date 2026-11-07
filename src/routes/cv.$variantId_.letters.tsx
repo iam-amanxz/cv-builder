@@ -257,7 +257,7 @@ function LettersPage() {
                         {generate.error && <p className="text-destructive">{generate.error.message}</p>}
                         <div className="grid gap-1">
                             <Label htmlFor="body" className="text-muted-foreground text-xs font-normal">
-                                Letter — blank line between paragraphs
+                                Letter (blank line between paragraphs)
                             </Label>
                             <Textarea
                                 id="body"

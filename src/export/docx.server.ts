@@ -171,7 +171,7 @@ export async function renderDocx(doc: CvDoc, t: ThemeTokens): Promise<Buffer> {
                             spacing: { before: 40 },
                             children: langs.flatMap((l, i) => [
                                 new TextRun({ text: `${i ? '   ·   ' : ''}${l.language}`, bold: true }),
-                                new TextRun({ text: l.fluency ? ` — ${l.fluency}` : '', color: muted }),
+                                new TextRun({ text: l.fluency ? ` (${l.fluency})` : '', color: muted }),
                             ]),
                         }),
                     )
@@ -190,7 +190,7 @@ export async function renderDocx(doc: CvDoc, t: ThemeTokens): Promise<Buffer> {
 
     const document = new Document({
         creator: b.name || 'CV Builder',
-        title: [b.name, b.label].filter(Boolean).join(' — ') || 'CV',
+        title: [b.name, b.label].filter(Boolean).join(', ') || 'CV',
         styles: {
             default: {
                 document: {

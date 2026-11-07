@@ -4,7 +4,7 @@ services:
         image: cv-builder:local
         container_name: cv-builder
         ports:
-            - '127.0.0.1:3000:3000' # local only — there is no auth
+            - '127.0.0.1:3000:3000' # local only; there is no auth
         volumes:
             - ./data:/data # cv.db + exports/
         env_file:

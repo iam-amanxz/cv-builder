@@ -216,7 +216,7 @@ function HistoryPage() {
                     </ol>
                     {snapshots.length === 0 && (
                         <p className="text-muted-foreground p-4 text-sm">
-                            No saved versions yet. Use “Save version” or export a PDF — every export is saved
+                            No saved versions yet. Use “Save version” or export a PDF; every export is saved
                             automatically.
                         </p>
                     )}
@@ -315,7 +315,7 @@ function HistoryPage() {
                         ) : !pair ? (
                             <p className="text-muted-foreground py-10 text-center text-sm">
                                 {snapshots.length === 0
-                                    ? 'Nothing to compare yet — save or export a version first.'
+                                    ? 'Nothing to compare yet. Save or export a version first.'
                                     : 'Pick a different version to compare against.'}
                             </p>
                         ) : diff ? (

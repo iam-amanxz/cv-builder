@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 /**
- * CvDoc — the single source of truth for CV content.
+ * CvDoc: the single source of truth for CV content.
  * Field names follow the JSON Resume schema (jsonresume.org) where one exists,
  * plus `id`/`hidden` on items and a `meta` block for layout choices.
  * Dates are free-form strings, normally "YYYY" or "YYYY-MM".

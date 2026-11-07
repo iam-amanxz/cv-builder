@@ -18,7 +18,7 @@ export function renderMarkdown(doc: CvDoc): string {
 
     const head = (title: string, subs: string[], date: string) => {
         const main = [title, ...subs.filter(Boolean)].filter(Boolean).join(' · ')
-        return `### ${main}${date ? ` — _${date}_` : ''}`
+        return `### ${main}${date ? ` · _${date}_` : ''}`
     }
     const bullets = (xs: string[]) =>
         xs
@@ -87,12 +87,12 @@ export function renderMarkdown(doc: CvDoc): string {
             case 'certificates':
                 for (const c of doc.certificates.filter((x) => !x.hidden))
                     block.push(
-                        `- **${c.name}**${c.issuer ? ` · ${c.issuer}` : ''}${c.date ? ` — _${formatDate(c.date)}_` : ''}`,
+                        `- **${c.name}**${c.issuer ? ` · ${c.issuer}` : ''}${c.date ? ` (_${formatDate(c.date)}_)` : ''}`,
                     )
                 break
             case 'languages':
                 for (const l of doc.languages.filter((x) => !x.hidden))
-                    block.push(`- **${l.language}**${l.fluency ? ` — ${l.fluency}` : ''}`)
+                    block.push(`- **${l.language}**${l.fluency ? ` (${l.fluency})` : ''}`)
                 break
             default: {
                 const c = doc.custom.find((x) => `custom:${x.id}` === key)

@@ -97,7 +97,7 @@ export const generateLetter = createServerFn({ method: 'POST' })
         const { runStructured } = await import('#/ai/client.server')
         const d = data.doc
         const cv = [
-            `${d.basics.name} — ${d.basics.label}`,
+            `${d.basics.name}, ${d.basics.label}`,
             d.basics.summary,
             ...d.work
                 .filter((w) => !w.hidden)
@@ -114,7 +114,7 @@ export const generateLetter = createServerFn({ method: 'POST' })
             effort: 'medium',
             output: letterResultSchema,
             logInput: { company: data.company, role: data.role, tone: data.tone, jobDescription: data.jobDescription },
-            system: `You write cover letters. Tone: ${data.tone}. Under 350 words. Open with why this role at this company, then two or three concrete achievements from the CV that match the job's priorities, then a short close. Plain, specific language — no clichés ("I am writing to express…", "passionate", "team player"). Only use facts from the CV; never invent experience, numbers or knowledge about the company beyond the job description.`,
+            system: `You write cover letters. Tone: ${data.tone}. Under 350 words. Open with why this role at this company, then two or three concrete achievements from the CV that match the job's priorities, then a short close. Plain, specific language with no clichés ("I am writing to express…", "passionate", "team player"). Only use facts from the CV; never invent experience, numbers or knowledge about the company beyond the job description.`,
             prompt: `Company: ${data.company || 'unknown'}\nRole: ${data.role || 'unknown'}\nRecipient: ${data.recipient || 'unknown'}\n\nCV:\n${cv}\n\nJob description:\n${data.jobDescription}`,
         })
         const body = [res.greeting, ...res.paragraphs, `${res.signOff}\n${d.basics.name}`].join('\n\n')

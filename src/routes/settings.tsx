@@ -14,7 +14,7 @@ export const Route = createFileRoute('/settings')({
 })
 
 const usd = (n: number | null | undefined) =>
-    n == null ? '—' : n < 0.01 && n > 0 ? '<$0.01' : `$${n.toFixed(n < 1 ? 3 : 2)}`
+    n == null ? '-' : n < 0.01 && n > 0 ? '<$0.01' : `$${n.toFixed(n < 1 ? 3 : 2)}`
 
 function SettingsPage() {
     const { data: status } = useSuspenseQuery(aiStatusQuery())

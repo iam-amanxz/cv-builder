@@ -12,7 +12,7 @@ export const bulletsResultSchema = z.object({
             index: z.number().describe('0-based index of the original bullet'),
             suggestion: z.string().describe('Improved bullet, or the original unchanged if already strong'),
             issues: z.array(z.string()).describe('Short problems found in the original, e.g. "no measurable result"'),
-            needsNumber: z.boolean().describe('True when a metric would help but none is known — never invent one'),
+            needsNumber: z.boolean().describe('True when a metric would help but none is known; never invent one'),
         }),
     ),
 })

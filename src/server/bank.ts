@@ -12,7 +12,7 @@ export interface BankEntry {
 
 /**
  * Every bullet ever written, from all CVs and all saved versions, de-duplicated.
- * Derived on demand — no separate store to keep in sync.
+ * Derived on demand; no separate store to keep in sync.
  */
 export const bulletBank = createServerFn({ method: 'GET' }).handler(async (): Promise<BankEntry[]> => {
     const db = getDb()

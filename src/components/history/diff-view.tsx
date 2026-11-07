@@ -93,7 +93,7 @@ export function DiffView({ diff }: { diff: CvDiff }) {
     if (diff.count === 0) {
         return (
             <p className="text-muted-foreground py-10 text-center text-sm">
-                No differences — these two versions are identical.
+                No differences. These two versions are identical.
             </p>
         )
     }

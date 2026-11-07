@@ -215,7 +215,7 @@ function Proposals({
                 {result.keywordsMissing.length > 0 && (
                     <div>
                         <div className="text-muted-foreground mb-1 text-xs">
-                            Missing keywords — add only if they are true for you
+                            Missing keywords (add only if they are true for you)
                         </div>
                         <div className="flex flex-wrap gap-1">
                             {result.keywordsMissing.map((k) => (
@@ -303,7 +303,7 @@ function Proposals({
             )}
 
             {!result.summary && !result.bulletRewrites.length && !result.visibility.length && (
-                <p className="text-muted-foreground text-sm">No edits suggested — this CV already fits the job well.</p>
+                <p className="text-muted-foreground text-sm">No edits suggested. This CV already fits the job well.</p>
             )}
         </div>
     )

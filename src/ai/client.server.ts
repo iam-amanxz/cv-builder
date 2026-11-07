@@ -3,6 +3,7 @@ import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod'
 import { nanoid } from 'nanoid'
 import { getDb, schema } from '#/db'
 import type { z } from 'zod'
+import { NO_EM_DASH_RULE, stripEmDashesDeep } from '#/cv/text'
 
 export const AI_MODEL = process.env.AI_MODEL || 'claude-opus-5-5'
 
@@ -33,7 +34,7 @@ export type AiKind = (typeof schema.aiRuns.$inferInsert)['kind']
  * One structured call: the response is validated against `output` (Zod) by
  * the SDK. Refusals are retried server-side on a fallback model
  * (fallbacks: 'default'); a refusal that survives that is surfaced as an error.
- * Every call — success or failure — is written to ai_runs with token usage.
+ * Every call (success or failure) is written to ai_runs with token usage.
  */
 export async function runStructured<TSchema extends z.ZodType>(opts: {
     kind: AiKind
@@ -73,7 +74,9 @@ export async function runStructured<TSchema extends z.ZodType>(opts: {
             max_tokens: 16000,
             betas: ['server-side-fallback-2026-07-01'],
             fallbacks: 'default',
-            system: opts.system,
+            system: `${opts.system}
+
+${NO_EM_DASH_RULE}`,
             messages: [{ role: 'user', content: opts.prompt }],
             output_config: { format: betaZodOutputFormat(opts.output), effort: opts.effort ?? 'medium' },
         })
@@ -88,16 +91,17 @@ export async function runStructured<TSchema extends z.ZodType>(opts: {
         }
         if (res.stop_reason === 'max_tokens' || !res.parsed_output) {
             log({ ...usage, status: 'error', error: `No valid output (stop_reason: ${res.stop_reason})` })
-            throw new Error('The AI response was incomplete — try again.')
+            throw new Error('The AI response was incomplete. Try again.')
         }
-        log({ ...usage, status: 'ok', output: res.parsed_output })
-        return res.parsed_output
+        const output = stripEmDashesDeep(res.parsed_output)
+        log({ ...usage, status: 'ok', output })
+        return output
     } catch (err) {
         if (err instanceof Anthropic.APIError) {
             log({ status: 'error', error: `${err.status ?? ''} ${err.message}`.trim() })
             if (err instanceof Anthropic.AuthenticationError) throw new Error('Anthropic API key was rejected.')
             if (err instanceof Anthropic.RateLimitError)
-                throw new Error('Rate limited by the API — wait a moment and retry.')
+                throw new Error('Rate limited by the API. Wait a moment and retry.')
             throw new Error(`AI request failed: ${err.message}`)
         }
         throw err

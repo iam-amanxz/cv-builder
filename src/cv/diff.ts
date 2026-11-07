@@ -75,7 +75,7 @@ const TOKEN_LABELS: Record<keyof ThemeTokens, string> = {
 
 const clean = (xs: string[]) => xs.map((x) => x.trim()).filter(Boolean)
 
-/** LCS line diff — fine for the short lists a CV has. */
+/** LCS line diff, fine for the short lists a CV has. */
 export function diffLines(a: string[], b: string[]): LineOp[] {
     const n = a.length
     const m = b.length

@@ -39,8 +39,8 @@ export function Field({
         <div className={cn('grid gap-1.5', (wide || multi) && 'col-span-2')}>
             <Label htmlFor={id} className="text-muted-foreground text-xs font-normal">
                 {label}
-                {type === 'lines' && <span className="opacity-70"> — one per line</span>}
-                {type === 'csv' && <span className="opacity-70"> — comma separated</span>}
+                {type === 'lines' && <span className="opacity-70"> (one per line)</span>}
+                {type === 'csv' && <span className="opacity-70"> (comma separated)</span>}
             </Label>
             {multi ? (
                 <Textarea

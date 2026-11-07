@@ -105,7 +105,7 @@ export function runAtsChecks(doc: CvDoc, pages: string[], themeId: string): AtsC
             'standard',
             'warn',
             'Non-standard heading names',
-            odd.map((s) => `“${s.title}” — ATS look for e.g. “${STANDARD[s.key]?.[0]}”`).join('; '),
+            odd.map((s) => `“${s.title}” (ATS look for e.g. “${STANDARD[s.key]?.[0]}”)`).join('; '),
         )
     }
 

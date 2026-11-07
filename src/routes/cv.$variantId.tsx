@@ -166,7 +166,7 @@ function EditorPage() {
             const next = tightenStep(tokens, overrides)
             if (!next) {
                 setFitTarget(null)
-                setFitMsg('Could not fit by spacing alone — hide or shorten an entry')
+                setFitMsg('Could not fit by spacing alone. Hide or shorten an entry')
                 return
             }
             setOverrides(next)
@@ -315,7 +315,7 @@ function EditorPage() {
                                 <DropdownMenuLabel>Export as</DropdownMenuLabel>
                                 <DropdownMenuItem onSelect={() => pdf.mutate('pdf')}>PDF</DropdownMenuItem>
                                 <DropdownMenuItem onSelect={() => pdf.mutate('docx')}>
-                                    Word (.docx) — single-column, ATS-safe
+                                    Word (.docx): single-column, ATS-safe
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onSelect={() => pdf.mutate('md')}>Markdown</DropdownMenuItem>
@@ -376,13 +376,13 @@ function SaveBadge({ state, onRetry }: { state: SaveState; onRetry: () => void }
                 title="Your edits here were not saved. Reload to load the latest version."
                 onClick={() => window.location.reload()}
             >
-                Changed elsewhere — reload
+                Changed elsewhere, reload
             </button>
         )
     if (state === 'error')
         return (
             <button className="text-destructive text-xs underline" onClick={onRetry}>
-                Save failed — retry
+                Save failed, retry
             </button>
         )
     const text = { saved: 'All changes saved', dirty: 'Unsaved changes…', saving: 'Saving…' }[state]

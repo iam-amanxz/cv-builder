@@ -201,7 +201,7 @@ export function sectionBody(doc: CvDoc, key: string): React.ReactNode {
                     {items.map((l) => (
                         <span key={l.id}>
                             <span className="title">{l.language}</span>
-                            {l.fluency && <span className="sub"> — {l.fluency}</span>}
+                            {l.fluency && <span className="sub"> ({l.fluency})</span>}
                         </span>
                     ))}
                 </div>

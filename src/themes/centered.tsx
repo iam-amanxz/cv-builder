@@ -177,7 +177,7 @@ function body(doc: CvDoc, key: string): React.ReactNode {
                     {items.map((l) => (
                         <li key={l.id}>
                             {l.language}
-                            {l.fluency && ` — ${l.fluency}`}
+                            {l.fluency && ` (${l.fluency})`}
                         </li>
                     ))}
                 </ul>

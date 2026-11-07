@@ -1,4 +1,4 @@
-# CV Builder — Plan
+# CV Builder: Plan
 
 Personal, single-user CV tool. Runs locally in Docker. Keeps every version, supports themes, exports PDF/DOCX, and uses AI to help write and tailor.
 
@@ -77,10 +77,10 @@ settings      key, value
 
 All AI output is a **proposal**: shown as a diff, accepted per change, never silently written.
 
-1. **Bullet coach** — rewrite a bullet (action + impact + metric), flag weak verbs/passive voice, ask for missing numbers.
-2. **Tailor to job** — paste a JD → keyword gap list, match score, proposed reorder/hide of items, proposed bullet rewrites, suggested summary. Accepting creates a new variant (or updates the current one after a snapshot).
-3. **Import** — upload an old PDF/DOCX (or LinkedIn export) → Claude extracts into CvDoc (validated by Zod) → review screen before saving.
-4. **Cover letter** — generated from the CvDoc + JD, rendered with the same theme, exported like the CV.
+1. **Bullet coach**: rewrite a bullet (action + impact + metric), flag weak verbs/passive voice, ask for missing numbers.
+2. **Tailor to job**: paste a JD → keyword gap list, match score, proposed reorder/hide of items, proposed bullet rewrites, suggested summary. Accepting creates a new variant (or updates the current one after a snapshot).
+3. **Import**: upload an old PDF/DOCX (or LinkedIn export) → Claude extracts into CvDoc (validated by Zod) → review screen before saving.
+4. **Cover letter**: generated from the CvDoc + JD, rendered with the same theme, exported like the CV.
 5. **Summary/headline generator** from the doc.
 
 Implementation: server functions only (API key never reaches the browser), structured output validated against Zod, retry once on validation failure, every call logged to `ai_runs` with token counts (settings page shows monthly spend).
@@ -88,9 +88,9 @@ Implementation: server functions only (API key never reaches the browser), struc
 ### Should (v2)
 
 - **Application tracker** (kanban by status), each entry linked to the exact snapshot sent.
-- **Fit to N pages** — auto-tighten spacing/font within theme limits, then suggest which items to hide.
-- **ATS check** — extract text from the generated PDF and verify reading order, contact info, section headings; warn on icons-only contacts, images, multi-column parse risk.
-- **Bullet bank** — every bullet ever written, tagged and searchable; insert into any variant.
+- **Fit to N pages**: auto-tighten spacing/font within theme limits, then suggest which items to hide.
+- **ATS check**: extract text from the generated PDF and verify reading order, contact info, section headings; warn on icons-only contacts, images, multi-column parse risk.
+- **Bullet bank**: every bullet ever written, tagged and searchable; insert into any variant.
 - **Interview prep** from a JD + variant (likely questions mapped to your bullets).
 
 ### Could (later)
@@ -118,7 +118,7 @@ Implementation: server functions only (API key never reaches the browser), struc
 
 - **PDF**: server fn → create snapshot → Playwright (one shared browser instance, new page per job) opens `http://localhost:3000/print/:snapshotId` → `waitForFunction(document.fonts.ready)` → `page.pdf({ format, printBackground: true, preferCSSPageSize: true })` → write `/data/exports/{date}-{variant}-{snapshot}.pdf` → row in `exports` → download.
 - Page breaks: `break-inside: avoid` on items, `@page` margins from theme tokens.
-- **DOCX**: deliberately simple single-column, ATS-safe layout; carries theme font, accent color, and section order. Not a pixel copy of the theme — stated in the UI.
+- **DOCX**: deliberately simple single-column, ATS-safe layout; carries theme font, accent color, and section order. Not a pixel copy of the theme; stated in the UI.
 
 ## 7. Docker
 
@@ -133,7 +133,7 @@ docker-compose.yml
 ```
 
 - Migrations run on container start (Drizzle migrate).
-- Image is large (~1.5 GB, because of Chromium) — acceptable locally.
+- Image is large (~1.5 GB, because of Chromium), acceptable locally.
 - Backup = copy `./data` (or use the in-app zip).
 
 ## 8. Project layout
@@ -163,7 +163,7 @@ cv-builder/
 | 3   | Theme system: 3 more themes, token editor, custom themes; DOCX, JSON, MD export; overflow warning                     | Switch theme without losing content; DOCX opens cleanly in Word |
 | 4   | AI: bullet coach, tailor-to-job, summary; proposal/diff-accept UI; `ai_runs` + spend view                             | Paste a JD → tailored variant in < 2 min                        |
 | 5   | AI import (PDF/DOCX/LinkedIn), cover letters                                                                          | Old CV imported with minimal fixes                              |
-| 6   | Application tracker, fit-to-page, ATS check, bullet bank, backup zip                                                  | —                                                               |
+| 6   | Application tracker, fit-to-page, ATS check, bullet bank, backup zip                                                  | -                                                               |
 
 ## 10. Risks / decisions noted
 

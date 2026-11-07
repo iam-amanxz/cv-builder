@@ -308,7 +308,7 @@ function ApplicationForm({
                         setForm({ ...form, variantId, exportId: latest?.id ?? null, letterId: null })
                     }}
                 >
-                    <option value="">—</option>
+                    <option value="">None</option>
                     {options.data?.variants.map((v) => (
                         <option key={v.id} value={v.id}>
                             {v.name}
@@ -325,7 +325,7 @@ function ApplicationForm({
                         value={form.exportId ?? ''}
                         onChange={(e) => set('exportId', e.target.value || null)}
                     >
-                        <option value="">— none yet —</option>
+                        <option value="">None yet</option>
                         {exports.map((x) => (
                             <option key={x.id} value={x.id}>
                                 {x.format.toUpperCase()} · {new Date(x.createdAt).toLocaleString()}
@@ -346,7 +346,7 @@ function ApplicationForm({
                         value={form.letterId ?? ''}
                         onChange={(e) => set('letterId', e.target.value || null)}
                     >
-                        <option value="">—</option>
+                        <option value="">None</option>
                         {letters.map((l) => (
                             <option key={l.id} value={l.id}>
                                 {[l.company, l.role].filter(Boolean).join(' · ') || 'Untitled letter'}
