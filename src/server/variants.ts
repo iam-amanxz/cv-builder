@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { getDb, schema } from '#/db'
 import { cvDocSchema, emptyDoc } from '#/cv/schema'
 import { sampleDoc } from '#/cv/sample'
+import { SAVE_CONFLICT } from '#/cv/errors'
 import { DEFAULT_THEME_ID, THEMES } from '#/themes'
 import { themeOverridesSchema } from '#/themes/types'
 
@@ -91,17 +92,23 @@ export const updateVariant = createServerFn({ method: 'POST' })
                 .string()
                 .refine((id) => id in THEMES, 'Unknown theme')
                 .optional(),
+            /** The `updatedAt` (ms) the editor last loaded or saved; the save is refused if the CV changed since. */
+            baseUpdatedAt: z.number(),
         }),
     )
     .handler(async ({ data }) => {
-        const { id, ...patch } = data
+        const { id, baseUpdatedAt, ...patch } = data
+        const db = getDb()
         const updatedAt = new Date()
-        const res = getDb()
+        const res = db
             .update(variants)
             .set({ ...patch, updatedAt })
-            .where(eq(variants.id, id))
+            .where(and(eq(variants.id, id), eq(variants.updatedAt, new Date(baseUpdatedAt))))
             .run()
-        if (res.changes === 0) throw new Error('CV not found')
+        if (res.changes === 0) {
+            const exists = db.select({ id: variants.id }).from(variants).where(eq(variants.id, id)).get()
+            throw new Error(exists ? SAVE_CONFLICT : 'CV not found')
+        }
         return { updatedAt }
     })
 

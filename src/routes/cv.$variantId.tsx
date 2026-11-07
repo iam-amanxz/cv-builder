@@ -16,6 +16,7 @@ import {
     TriangleAlert,
 } from 'lucide-react'
 import { aiStatusQuery, exportsQuery, variantQuery } from '#/cv/queries'
+import { SAVE_CONFLICT } from '#/cv/errors'
 import { updateVariant } from '#/server/variants'
 import { exportFile } from '#/server/export'
 import { saveVersion } from '#/server/history'
@@ -55,7 +56,7 @@ export const Route = createFileRoute('/cv/$variantId')({
     component: EditorPage,
 })
 
-type SaveState = 'saved' | 'dirty' | 'saving' | 'error'
+type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict'
 const AUTOSAVE_MS = 800
 
 function EditorPage() {
@@ -73,15 +74,25 @@ function EditorPage() {
     // Latest unsaved values, so flush() can save without stale closures.
     const pending = useRef<{ doc?: CvDoc; themeOverrides?: ThemeOverrides; themeId?: string; name?: string }>({})
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+    // Version this editor last loaded or saved. Saves are conditional on it, so a
+    // stale tab can't overwrite changes made elsewhere (another tab, a restore, a script).
+    const base = useRef(variant.updatedAt.getTime())
+    const conflicted = useRef(false)
+    // Saves run one at a time, each starting from the previous one's version.
+    const chain = useRef<Promise<void>>(Promise.resolve())
 
-    const flush = useCallback(async () => {
+    const saveNow = useCallback(async () => {
         clearTimeout(timer.current)
         const patch = pending.current
         if (!Object.keys(patch).length) return
+        if (conflicted.current) throw new Error(SAVE_CONFLICT)
         pending.current = {}
         setSaveState('saving')
         try {
-            const { updatedAt } = await updateVariant({ data: { id: variantId, ...patch } })
+            const { updatedAt } = await updateVariant({
+                data: { id: variantId, baseUpdatedAt: base.current, ...patch },
+            })
+            base.current = updatedAt.getTime()
             // Keep the cached variant in sync so re-opening the editor (or the
             // history page) sees what was just saved, not the copy from first load.
             qc.setQueryData(variantQuery(variantId).queryKey, (old) => (old ? { ...old, ...patch, updatedAt } : old))
@@ -89,16 +100,26 @@ function EditorPage() {
             qc.invalidateQueries({ queryKey: ['variants'] })
         } catch (err) {
             pending.current = { ...patch, ...pending.current }
-            setSaveState('error')
+            if (err instanceof Error && err.message === SAVE_CONFLICT) {
+                conflicted.current = true
+                setSaveState('conflict')
+            } else setSaveState('error')
             throw err
         }
     }, [qc, variantId])
 
+    const flush = useCallback(() => {
+        const run = chain.current.catch(() => {}).then(saveNow)
+        chain.current = run
+        return run
+    }, [saveNow])
+
     const schedule = useCallback(
         (patch: typeof pending.current) => {
             pending.current = { ...pending.current, ...patch }
-            setSaveState('dirty')
             clearTimeout(timer.current)
+            if (conflicted.current) return
+            setSaveState('dirty')
             timer.current = setTimeout(() => void flush().catch(() => {}), AUTOSAVE_MS)
         },
         [flush],
@@ -348,6 +369,16 @@ function EditorPage() {
 }
 
 function SaveBadge({ state, onRetry }: { state: SaveState; onRetry: () => void }) {
+    if (state === 'conflict')
+        return (
+            <button
+                className="text-destructive text-xs underline"
+                title="Your edits here were not saved. Reload to load the latest version."
+                onClick={() => window.location.reload()}
+            >
+                Changed elsewhere — reload
+            </button>
+        )
     if (state === 'error')
         return (
             <button className="text-destructive text-xs underline" onClick={onRetry}>
