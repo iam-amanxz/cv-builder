@@ -5,7 +5,7 @@ Personal CV tool: structured content, themes, every version kept, PDF/Word expor
 ## Features
 
 - **Editor** with autosave, custom sections, reorder/hide; live A4/Letter preview with page breaks and an overflow warning + **Fit to page**
-- **Themes**: Centered (default), Classic, Modern (two-column), Minimal, Compact; full token editor; saved "My themes"
+- **Themes**: Centered (default), Airy, Classic, Modern (two-column), Minimal, Compact; full token editor; saved "My themes"
 - **Export**: PDF (pixel-identical to preview), Word (single-column, ATS-safe), Markdown, JSON Resume; every export is kept and linked to a frozen version
 - **History**: saved versions, preview any version, field-level diff, restore (undoable), copy to a new CV
 - **AI** (Claude): bullet coach, summary suggestions, tailor-to-job with match score and selectable edits, cover letters, import from PDF/Word/text. Every AI change snapshots first; usage and cost on the Settings page

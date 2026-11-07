@@ -1,3 +1,4 @@
+import { airyTheme } from './airy'
 import { centeredTheme } from './centered'
 import { classicTheme } from './classic'
 import { compactTheme } from './compact'
@@ -8,6 +9,7 @@ import type { ThemeDef, ThemeOverrides, ThemeTokens } from './types'
 
 export const THEMES: Record<string, ThemeDef> = {
     [centeredTheme.id]: centeredTheme,
+    [airyTheme.id]: airyTheme,
     [classicTheme.id]: classicTheme,
     [modernTheme.id]: modernTheme,
     [minimalTheme.id]: minimalTheme,
