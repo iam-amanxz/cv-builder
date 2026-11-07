@@ -36,7 +36,10 @@ export function formatRange(start: string, end: string, presentLabel = 'Present'
 
 /** Strip protocol for display: "https://x.dev/" → "x.dev". */
 export function displayUrl(url: string): string {
-    return url.replace(/^https?:\/\//, '').replace(/\/$/, '')
+    return url
+        .replace(/^https?:\/\//, '')
+        .replace(/^www\./, '')
+        .replace(/\/$/, '')
 }
 
 export function hrefFor(url: string): string {

@@ -17,6 +17,7 @@ ${R} h1 { font-family: var(--cv-font-heading); font-size: 3.1em; line-height: 1.
 ${R} .label { font-weight: 700; font-size: 1.1em; margin-top: 0.7em; }
 ${R} .contact { margin-top: 0.45em; }
 ${R} .contact .sep { margin: 0 0.35em; }
+${R} .contact > span { white-space: nowrap; }
 ${R} section { margin-top: var(--cv-gap); }
 ${R} h2 { font-family: var(--cv-font-heading); font-size: 1.55em; font-weight: 700; text-transform: uppercase; color: var(--cv-accent); padding-bottom: 0.12em; border-bottom: 1px solid var(--cv-muted); margin-bottom: 0.4em; }
 ${R} .sec-summary p { text-align: justify; }
