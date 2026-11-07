@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as GapsRouteImport } from './routes/gaps'
 import { Route as ImportRouteImport } from './routes/import'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ApiBackupRouteImport } from './routes/api.backup'
@@ -18,6 +19,7 @@ import { Route as CvVariantIdRouteImport } from './routes/cv.$variantId'
 import { Route as PrintSnapshotIdRouteImport } from './routes/print.$snapshotId'
 import { Route as ApiExportsExportIdRouteImport } from './routes/api.exports.$exportId'
 import { Route as CvVariantIdHistoryRouteImport } from './routes/cv.$variantId_.history'
+import { Route as CvVariantIdInterviewRouteImport } from './routes/cv.$variantId_.interview'
 import { Route as CvVariantIdLettersRouteImport } from './routes/cv.$variantId_.letters'
 import { Route as CvVariantIdTailorRouteImport } from './routes/cv.$variantId_.tailor'
 import { Route as PrintLetterLetterIdRouteImport } from './routes/print.letter.$letterId'
@@ -32,6 +34,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApplicationsRoute = ApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GapsRoute = GapsRouteImport.update({
+  id: '/gaps',
+  path: '/gaps',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportRoute = ImportRouteImport.update({
@@ -69,6 +76,11 @@ const CvVariantIdHistoryRoute = CvVariantIdHistoryRouteImport.update({
   path: '/cv/$variantId/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvVariantIdInterviewRoute = CvVariantIdInterviewRouteImport.update({
+  id: '/cv/$variantId_/interview',
+  path: '/cv/$variantId/interview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CvVariantIdLettersRoute = CvVariantIdLettersRouteImport.update({
   id: '/cv/$variantId_/letters',
   path: '/cv/$variantId/letters',
@@ -98,6 +110,7 @@ const ApiLettersLetterIdPdfRoute = ApiLettersLetterIdPdfRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/gaps': typeof GapsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/api/backup': typeof ApiBackupRoute
@@ -105,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/interview': typeof CvVariantIdInterviewRoute
   '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
@@ -114,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/gaps': typeof GapsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/api/backup': typeof ApiBackupRoute
@@ -121,6 +136,7 @@ export interface FileRoutesByTo {
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId/interview': typeof CvVariantIdInterviewRoute
   '/cv/$variantId/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
@@ -131,6 +147,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/gaps': typeof GapsRoute
   '/import': typeof ImportRoute
   '/settings': typeof SettingsRoute
   '/api/backup': typeof ApiBackupRoute
@@ -138,6 +155,7 @@ export interface FileRoutesById {
   '/print/$snapshotId': typeof PrintSnapshotIdRoute
   '/api/exports/$exportId': typeof ApiExportsExportIdRoute
   '/cv/$variantId_/history': typeof CvVariantIdHistoryRoute
+  '/cv/$variantId_/interview': typeof CvVariantIdInterviewRoute
   '/cv/$variantId_/letters': typeof CvVariantIdLettersRoute
   '/cv/$variantId_/tailor': typeof CvVariantIdTailorRoute
   '/print/letter/$letterId': typeof PrintLetterLetterIdRoute
@@ -149,6 +167,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/applications'
+    | '/gaps'
     | '/import'
     | '/settings'
     | '/api/backup'
@@ -156,6 +175,7 @@ export interface FileRouteTypes {
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/interview'
     | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
     | '/print/letter/$letterId'
@@ -165,6 +185,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/applications'
+    | '/gaps'
     | '/import'
     | '/settings'
     | '/api/backup'
@@ -172,6 +193,7 @@ export interface FileRouteTypes {
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId/history'
+    | '/cv/$variantId/interview'
     | '/cv/$variantId/letters'
     | '/cv/$variantId/tailor'
     | '/print/letter/$letterId'
@@ -181,6 +203,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/applications'
+    | '/gaps'
     | '/import'
     | '/settings'
     | '/api/backup'
@@ -188,6 +211,7 @@ export interface FileRouteTypes {
     | '/print/$snapshotId'
     | '/api/exports/$exportId'
     | '/cv/$variantId_/history'
+    | '/cv/$variantId_/interview'
     | '/cv/$variantId_/letters'
     | '/cv/$variantId_/tailor'
     | '/print/letter/$letterId'
@@ -198,6 +222,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApplicationsRoute: typeof ApplicationsRoute
+  GapsRoute: typeof GapsRoute
   ImportRoute: typeof ImportRoute
   SettingsRoute: typeof SettingsRoute
   ApiBackupRoute: typeof ApiBackupRoute
@@ -205,6 +230,7 @@ export interface RootRouteChildren {
   PrintSnapshotIdRoute: typeof PrintSnapshotIdRoute
   ApiExportsExportIdRoute: typeof ApiExportsExportIdRoute
   CvVariantIdHistoryRoute: typeof CvVariantIdHistoryRoute
+  CvVariantIdInterviewRoute: typeof CvVariantIdInterviewRoute
   CvVariantIdLettersRoute: typeof CvVariantIdLettersRoute
   CvVariantIdTailorRoute: typeof CvVariantIdTailorRoute
   PrintLetterLetterIdRoute: typeof PrintLetterLetterIdRoute
@@ -226,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/applications'
       fullPath: '/applications'
       preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gaps': {
+      id: '/gaps'
+      path: '/gaps'
+      fullPath: '/gaps'
+      preLoaderRoute: typeof GapsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import': {
@@ -277,6 +310,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvVariantIdHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv/$variantId_/interview': {
+      id: '/cv/$variantId_/interview'
+      path: '/cv/$variantId/interview'
+      fullPath: '/cv/$variantId/interview'
+      preLoaderRoute: typeof CvVariantIdInterviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cv/$variantId_/letters': {
       id: '/cv/$variantId_/letters'
       path: '/cv/$variantId/letters'
@@ -318,6 +358,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApplicationsRoute: ApplicationsRoute,
+  GapsRoute: GapsRoute,
   ImportRoute: ImportRoute,
   SettingsRoute: SettingsRoute,
   ApiBackupRoute: ApiBackupRoute,
@@ -325,6 +366,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrintSnapshotIdRoute: PrintSnapshotIdRoute,
   ApiExportsExportIdRoute: ApiExportsExportIdRoute,
   CvVariantIdHistoryRoute: CvVariantIdHistoryRoute,
+  CvVariantIdInterviewRoute: CvVariantIdInterviewRoute,
   CvVariantIdLettersRoute: CvVariantIdLettersRoute,
   CvVariantIdTailorRoute: CvVariantIdTailorRoute,
   PrintLetterLetterIdRoute: PrintLetterLetterIdRoute,

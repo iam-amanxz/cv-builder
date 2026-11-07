@@ -1,7 +1,8 @@
 import { sql } from 'drizzle-orm'
-import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { APPLICATION_STATUSES } from '#/cv/applications'
+import { index, integer, real, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
+import { APPLICATION_STATUSES, SKILL_STATUSES } from '#/cv/applications'
 import type { CvDoc } from '#/cv/schema'
+import type { InterviewPrep } from '#/ai/schemas'
 import type { ThemeOverrides, ThemeTokens } from '#/themes/types'
 
 const createdAt = () =>
@@ -77,7 +78,9 @@ export const aiRuns = sqliteTable(
     'ai_runs',
     {
         id: text('id').primaryKey(),
-        kind: text('kind', { enum: ['bullets', 'tailor', 'summary', 'import', 'cover-letter'] }).notNull(),
+        kind: text('kind', {
+            enum: ['bullets', 'tailor', 'summary', 'import', 'cover-letter', 'interview', 'job-import', 'gaps'],
+        }).notNull(),
         variantId: text('variant_id'),
         model: text('model').notNull(),
         status: text('status', { enum: ['ok', 'error', 'refusal'] }).notNull(),
@@ -120,6 +123,7 @@ export const applications = sqliteTable(
         company: text('company').notNull(),
         role: text('role').notNull().default(''),
         url: text('url').notNull().default(''),
+        jobDescription: text('job_description').notNull().default(''),
         variantId: text('variant_id').references(() => variants.id),
         exportId: text('export_id').references(() => exportsTable.id),
         letterId: text('letter_id').references(() => coverLetters.id, { onDelete: 'set null' }),
@@ -131,3 +135,57 @@ export const applications = sqliteTable(
     },
     (t) => [index('applications_status_idx').on(t.status)],
 )
+
+/** Interview preparation for one CV, usually tied to an application. `result` is the AI output. */
+export const interviewPreps = sqliteTable(
+    'interview_preps',
+    {
+        id: text('id').primaryKey(),
+        variantId: text('variant_id')
+            .notNull()
+            .references(() => variants.id),
+        applicationId: text('application_id').references(() => applications.id, { onDelete: 'set null' }),
+        company: text('company').notNull().default(''),
+        role: text('role').notNull().default(''),
+        jobDescription: text('job_description').notNull().default(''),
+        result: text('result', { mode: 'json' }).$type<InterviewPrep>(),
+        notes: text('notes').notNull().default(''),
+        createdAt: createdAt(),
+        updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+    },
+    (t) => [index('interview_preps_variant_idx').on(t.variantId)],
+)
+
+/** A skill one job asks for that the CV doesn't show. Aggregated by `skillKey` on the gaps page. */
+export const jobGaps = sqliteTable(
+    'job_gaps',
+    {
+        id: text('id').primaryKey(),
+        applicationId: text('application_id')
+            .notNull()
+            .references(() => applications.id, { onDelete: 'cascade' }),
+        skill: text('skill').notNull(),
+        skillKey: text('skill_key').notNull(),
+        importance: text('importance', { enum: ['required', 'nice'] })
+            .notNull()
+            .default('required'),
+        /** What the job says, in its own words. */
+        requirement: text('requirement').notNull().default(''),
+        source: text('source', { enum: ['ai', 'manual'] })
+            .notNull()
+            .default('manual'),
+        createdAt: createdAt(),
+    },
+    (t) => [
+        uniqueIndex('job_gaps_app_skill_idx').on(t.applicationId, t.skillKey),
+        index('job_gaps_skill_idx').on(t.skillKey),
+    ],
+)
+
+/** What you're doing about a skill gap, across all jobs. */
+export const skillProgress = sqliteTable('skill_progress', {
+    skillKey: text('skill_key').primaryKey(),
+    status: text('status', { enum: SKILL_STATUSES }).notNull().default('open'),
+    notes: text('notes').notNull().default(''),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+})

@@ -63,6 +63,7 @@ const fields = z.object({
     company: z.string().trim().min(1).max(200),
     role: z.string().max(200),
     url: z.string().max(1000),
+    jobDescription: z.string().max(40000).default(''),
     variantId: z.string().nullable(),
     exportId: z.string().nullable(),
     letterId: z.string().nullable(),

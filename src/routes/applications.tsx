@@ -1,7 +1,19 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { queryOptions, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { ArrowLeft, ExternalLink, FileDown, History, Plus, Trash2, X } from 'lucide-react'
+import { z } from 'zod'
+import {
+    ArrowLeft,
+    ExternalLink,
+    FileDown,
+    History,
+    Link2,
+    MessagesSquare,
+    Plus,
+    Sparkles,
+    Trash2,
+    X,
+} from 'lucide-react'
 import {
     applicationOptions,
     createApplication,
@@ -16,6 +28,9 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 import { Textarea } from '#/components/ui/textarea'
 import { cn } from '#/lib/utils'
+import { createPrep } from '#/server/interview'
+import { JobImport } from '#/components/applications/job-import'
+import { ApplicationGaps } from '#/components/applications/app-gaps'
 
 type Status = (typeof APPLICATION_STATUSES)[number]
 
@@ -23,6 +38,7 @@ const appsQuery = () => queryOptions({ queryKey: ['applications'], queryFn: () =
 const optionsQuery = () => queryOptions({ queryKey: ['application-options'], queryFn: () => applicationOptions() })
 
 export const Route = createFileRoute('/applications')({
+    validateSearch: z.object({ add: z.literal('link').optional() }),
     loader: ({ context }) => context.queryClient.ensureQueryData(appsQuery()),
     head: () => ({ meta: [{ title: 'Applications · CV Builder' }] }),
     component: ApplicationsPage,
@@ -50,6 +66,7 @@ interface FormState {
     company: string
     role: string
     url: string
+    jobDescription: string
     variantId: string | null
     exportId: string | null
     letterId: string | null
@@ -62,6 +79,7 @@ const blank = (): FormState => ({
     company: '',
     role: '',
     url: '',
+    jobDescription: '',
     variantId: null,
     exportId: null,
     letterId: null,
@@ -76,6 +94,10 @@ function ApplicationsPage() {
     const { data: apps } = useSuspenseQuery(appsQuery())
     const qc = useQueryClient()
     const [form, setForm] = useState<FormState | null>(null)
+    const { add } = Route.useSearch()
+    const navigate = useNavigate({ from: Route.fullPath })
+    const importing = add === 'link'
+    const setImporting = (on: boolean) => navigate({ search: on ? { add: 'link' } : {} })
     const refresh = () => qc.invalidateQueries({ queryKey: ['applications'] })
 
     const move = useMutation({
@@ -100,7 +122,22 @@ function ApplicationsPage() {
                 </Button>
                 <h1 className="font-medium">Applications</h1>
                 <span className="text-muted-foreground text-xs">{apps.length} total</span>
-                <Button className="ml-auto" onClick={() => setForm(blank())}>
+                <Button
+                    variant="outline"
+                    className="ml-auto"
+                    onClick={() => {
+                        setForm(null)
+                        setImporting(true)
+                    }}
+                >
+                    <Link2 /> From job link
+                </Button>
+                <Button
+                    onClick={() => {
+                        setImporting(false)
+                        setForm(blank())
+                    }}
+                >
                     <Plus /> New application
                 </Button>
             </header>
@@ -129,12 +166,14 @@ function ApplicationsPage() {
                                         >
                                             <button
                                                 className="block w-full text-left"
-                                                onClick={() =>
+                                                onClick={() => {
+                                                    setImporting(false)
                                                     setForm({
                                                         id: app.id,
                                                         company: app.company,
                                                         role: app.role,
                                                         url: app.url,
+                                                        jobDescription: app.jobDescription,
                                                         variantId: app.variantId,
                                                         exportId: app.exportId,
                                                         letterId: app.letterId,
@@ -142,7 +181,7 @@ function ApplicationsPage() {
                                                         appliedAt: app.appliedAt,
                                                         notes: app.notes,
                                                     })
-                                                }
+                                                }}
                                             >
                                                 <div className="font-medium">{app.company}</div>
                                                 {app.role && <div className="text-muted-foreground">{app.role}</div>}
@@ -202,7 +241,8 @@ function ApplicationsPage() {
                         )
                     })}
                 </div>
-                {form && <ApplicationForm form={form} setForm={setForm} onDone={refresh} />}
+                {importing && <JobImport onClose={() => setImporting(false)} onCreated={refresh} />}
+                {form && !importing && <ApplicationForm form={form} setForm={setForm} onDone={refresh} />}
             </div>
         </div>
     )
@@ -232,6 +272,18 @@ function ApplicationForm({
             await onDone()
             setForm(null)
         },
+    })
+    const navigate = useNavigate()
+    const prep = useMutation({
+        mutationFn: async () => {
+            if (!form.id || !form.variantId) throw new Error('Link a CV first')
+            const { id, ...data } = form
+            await updateApplication({ data: { id, ...data } })
+            const res = await createPrep({ data: { variantId: form.variantId, applicationId: id } })
+            return { ...res, variantId: form.variantId }
+        },
+        onSuccess: ({ id, variantId }) =>
+            navigate({ to: '/cv/$variantId/interview', params: { variantId }, search: { id } }),
     })
     const remove = useMutation({
         mutationFn: (id: string) => deleteApplication({ data: { id } }),
@@ -269,6 +321,15 @@ function ApplicationForm({
                         </Button>
                     )}
                 </div>
+            </div>
+            <div className="grid gap-1">
+                <Label htmlFor="a-jd">Job description</Label>
+                <Textarea
+                    id="a-jd"
+                    rows={5}
+                    value={form.jobDescription}
+                    onChange={(e) => set('jobDescription', e.target.value)}
+                />
             </div>
             <div className="grid grid-cols-2 gap-2">
                 <div className="grid gap-1">
@@ -359,8 +420,33 @@ function ApplicationForm({
                 <Label htmlFor="a-notes">Notes</Label>
                 <Textarea id="a-notes" rows={5} value={form.notes} onChange={(e) => set('notes', e.target.value)} />
             </div>
-            {(save.error ?? remove.error) && (
-                <p className="text-destructive">{(save.error ?? remove.error)?.message}</p>
+            {form.id && form.variantId && (
+                <div className="flex gap-2">
+                    <Button asChild variant="outline" size="sm" className="flex-1">
+                        <Link
+                            to="/cv/$variantId/tailor"
+                            params={{ variantId: form.variantId }}
+                            search={{ app: form.id }}
+                        >
+                            <Sparkles /> Tailor CV
+                        </Link>
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        disabled={prep.isPending}
+                        onClick={() => prep.mutate()}
+                    >
+                        <MessagesSquare /> Interview prep
+                    </Button>
+                </div>
+            )}
+            {form.id && (
+                <ApplicationGaps applicationId={form.id} hasDescription={form.jobDescription.trim().length >= 40} />
+            )}
+            {(save.error ?? remove.error ?? prep.error) && (
+                <p className="text-destructive">{(save.error ?? remove.error ?? prep.error)?.message}</p>
             )}
             <div className="flex items-center gap-2">
                 <Button disabled={!form.company.trim() || save.isPending} onClick={() => save.mutate()}>

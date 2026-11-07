@@ -4,10 +4,9 @@ import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import { getDb, schema } from '#/db'
 import { cvDocSchema } from '#/cv/schema'
-import { formatRange } from '#/cv/format'
 import { createSnapshot } from '#/server/snapshots.server'
 import { bulletsResultSchema, summaryResultSchema, tailorResultSchema } from './schemas'
-import type { CvDoc } from '#/cv/schema'
+import { cvAsText } from './cv-text'
 
 /**
  * AI server functions. The client is imported lazily inside handlers so the
@@ -17,44 +16,6 @@ import type { CvDoc } from '#/cv/schema'
 const HONESTY = `Only use facts already present in the CV. Never invent employers, titles, dates, metrics, tools or achievements. If a stronger claim would need information you do not have, say so instead of making it up.`
 
 const STYLE = `Write in the CV owner's voice: implied first person (no "I"), past tense for past roles, present tense for the current one. Start bullets with a strong verb, lead with impact, keep each bullet to one or two lines, no buzzwords or filler.`
-
-/** Compact text rendering of the CV with ids the model can refer back to. */
-function cvAsText(doc: CvDoc): string {
-    const lines: string[] = []
-    const b = doc.basics
-    lines.push(`Name: ${b.name}`, `Headline: ${b.label}`, `Location: ${b.location}`, '', `Summary: ${b.summary}`, '')
-    for (const w of doc.work) {
-        lines.push(
-            `[work id=${w.id}${w.hidden ? ' HIDDEN' : ''}] ${w.position} · ${w.name} (${formatRange(w.startDate, w.endDate)})`,
-        )
-        if (w.summary) lines.push(`  summary: ${w.summary}`)
-        w.highlights.forEach((h, i) => h.trim() && lines.push(`  b${i}: ${h.trim()}`))
-    }
-    for (const p of doc.projects) {
-        lines.push(`[projects id=${p.id}${p.hidden ? ' HIDDEN' : ''}] ${p.name}: ${p.description}`)
-        p.highlights.forEach((h, i) => h.trim() && lines.push(`  b${i}: ${h.trim()}`))
-    }
-    for (const e of doc.education) {
-        lines.push(
-            `[education id=${e.id}${e.hidden ? ' HIDDEN' : ''}] ${[e.studyType, e.area].filter(Boolean).join(' in ')} · ${e.institution}`,
-        )
-        e.highlights.forEach((h, i) => h.trim() && lines.push(`  b${i}: ${h.trim()}`))
-    }
-    const skills = doc.skills.filter((s) => !s.hidden)
-    if (skills.length) {
-        lines.push('', 'Skills:')
-        for (const s of skills)
-            lines.push(
-                `  ${s.name}: ${s.keywords
-                    .map((k) => k.trim())
-                    .filter(Boolean)
-                    .join(', ')}`,
-            )
-    }
-    const certs = doc.certificates.filter((c) => !c.hidden)
-    if (certs.length) lines.push('', `Certifications: ${certs.map((c) => c.name).join('; ')}`)
-    return lines.join('\n')
-}
 
 async function ai() {
     return import('./client.server')

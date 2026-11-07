@@ -1,9 +1,11 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { z } from 'zod'
 import { ArrowLeft, Copy, Eye, EyeOff, Loader2, Sparkles, Wand2 } from 'lucide-react'
 import { aiStatusQuery, variantQuery } from '#/cv/queries'
 import { applyAiDoc, tailorToJob } from '#/ai/tasks'
+import { getApplication } from '#/server/jobs'
 import { allProposalKeys, applyTailor, itemLabel, originalBullet, proposalKey } from '#/ai/apply'
 import { resolveTokens } from '#/themes'
 import { Button } from '#/components/ui/button'
@@ -13,6 +15,8 @@ import { cn } from '#/lib/utils'
 import type { TailorResult } from '#/ai/schemas'
 
 export const Route = createFileRoute('/cv/$variantId_/tailor')({
+    /** `app`: start from this application's job description. */
+    validateSearch: z.object({ app: z.string().optional() }),
     loader: ({ context, params }) => context.queryClient.ensureQueryData(variantQuery(params.variantId)),
     head: ({ loaderData }) => ({ meta: [{ title: `Tailor · ${loaderData?.name ?? 'CV'} · CV Builder` }] }),
     component: TailorPage,
@@ -63,6 +67,16 @@ function TailorPage() {
     const navigate = useNavigate()
 
     const [jd, setJd] = useState('')
+    const { app: applicationId } = Route.useSearch()
+    const application = useQuery({
+        queryKey: ['application', applicationId],
+        queryFn: () => getApplication({ data: { id: applicationId ?? '' } }),
+        enabled: !!applicationId,
+    })
+    const fromApp = application.data?.jobDescription
+    useEffect(() => {
+        if (fromApp) setJd((cur) => cur || fromApp)
+    }, [fromApp])
     const [result, setResult] = useState<TailorResult | null>(null)
     const [selected, setSelected] = useState<Set<string>>(new Set())
 

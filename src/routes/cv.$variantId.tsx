@@ -9,6 +9,7 @@ import {
     History,
     Loader2,
     Mail,
+    MessagesSquare,
     Minimize2,
     Save,
     ScanText,
@@ -219,6 +220,10 @@ function EditorPage() {
         await flush().catch(() => {})
         navigate({ to: '/cv/$variantId/letters', params: { variantId } })
     }
+    const openInterview = async () => {
+        await flush().catch(() => {})
+        navigate({ to: '/cv/$variantId/interview', params: { variantId } })
+    }
     const openHistory = async () => {
         await flush().catch(() => {})
         navigate({ to: '/cv/$variantId/history', params: { variantId } })
@@ -282,6 +287,9 @@ function EditorPage() {
                     </Button>
                     <Button variant="ghost" onClick={() => void openLetters()}>
                         <Mail /> Letters
+                    </Button>
+                    <Button variant="ghost" onClick={() => void openInterview()}>
+                        <MessagesSquare /> Interview
                     </Button>
                     <Button variant="ghost" onClick={() => void openHistory()}>
                         <History /> History

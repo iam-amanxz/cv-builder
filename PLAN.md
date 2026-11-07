@@ -91,7 +91,7 @@ Implementation: server functions only (API key never reaches the browser), struc
 - **Fit to N pages**: auto-tighten spacing/font within theme limits, then suggest which items to hide.
 - **ATS check**: extract text from the generated PDF and verify reading order, contact info, section headings; warn on icons-only contacts, images, multi-column parse risk.
 - **Bullet bank**: every bullet ever written, tagged and searchable; insert into any variant.
-- **Interview prep** from a JD + variant (likely questions mapped to your bullets).
+- **Interview prep** from a JD + variant (likely questions mapped to your bullets). Built, along with job link import and a skill gap tracker.
 
 ### Could (later)
 
