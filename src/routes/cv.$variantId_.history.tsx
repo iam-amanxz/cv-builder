@@ -48,10 +48,10 @@ const REASON_LABEL = {
 } as const
 
 const REASON_STYLE = {
-    manual: 'bg-sky-100 text-sky-800',
-    export: 'bg-violet-100 text-violet-800',
-    'ai-apply': 'bg-amber-100 text-amber-800',
-    restore: 'bg-zinc-200 text-zinc-700',
+    manual: 'bg-info-wash text-info-ink',
+    export: 'bg-ai-wash text-ai-ink',
+    'ai-apply': 'bg-warn-wash text-warn-ink',
+    restore: 'bg-muted text-foreground',
 } as const
 
 interface Version {
@@ -162,14 +162,14 @@ function HistoryPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to editor">
                     <Link to="/cv/$variantId" params={{ variantId }}>
                         <ArrowLeft />
                     </Link>
                 </Button>
                 <History className="text-muted-foreground size-4" />
-                <h1 className="font-medium">History · {variant.name}</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">History · {variant.name}</h1>
                 <div className="ml-auto flex items-center gap-2">
                     <Button
                         variant="outline"
@@ -187,7 +187,7 @@ function HistoryPage() {
 
             <div className="grid min-h-0 flex-1 md:grid-cols-[320px_1fr]">
                 <aside className="min-h-0 overflow-y-auto border-r">
-                    <ol className="divide-y">
+                    <ol className="divide-y divide-hairline">
                         <VersionRow
                             active={selected === CURRENT}
                             onSelect={() => navigate({ search: { tab } })}

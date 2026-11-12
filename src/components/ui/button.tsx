@@ -5,18 +5,21 @@ import { cn } from '#/lib/utils'
 import { Slot } from 'radix-ui'
 
 const buttonVariants = cva(
-    "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    "inline-flex shrink-0 items-center justify-center gap-2 rounded-md border-2 border-transparent text-sm font-semibold whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-foreground disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     {
         variants: {
             variant: {
-                default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+                default:
+                    'border-foreground bg-primary text-primary-foreground shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-hard active:translate-x-0 active:translate-y-0 active:shadow-none',
                 destructive:
-                    'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
+                    'border-foreground bg-bad text-foreground shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-hard active:translate-x-0 active:translate-y-0 active:shadow-none',
                 outline:
-                    'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-                secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-                ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-                link: 'text-primary underline-offset-4 hover:underline',
+                    'border-foreground bg-card text-foreground shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-hard active:translate-x-0 active:translate-y-0 active:shadow-none',
+                secondary:
+                    'border-foreground bg-secondary text-secondary-foreground shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-hard active:translate-x-0 active:translate-y-0 active:shadow-none',
+                ai: 'border-foreground bg-ai text-ai-foreground shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-hard active:translate-x-0 active:translate-y-0 active:shadow-none',
+                ghost: 'hover:border-foreground hover:bg-card hover:text-accent-foreground',
+                link: 'text-foreground underline decoration-primary decoration-[3px] underline-offset-4 hover:decoration-foreground',
             },
             size: {
                 default: 'h-9 px-4 py-2 has-[>svg]:px-3',

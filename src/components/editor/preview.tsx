@@ -64,7 +64,7 @@ export function Preview({
         <div ref={outerRef} className="w-full py-4">
             <div className="relative mx-auto" style={{ width: pageW * scale, height: pages * pageH * scale }}>
                 <div
-                    className="absolute top-0 left-0 origin-top-left bg-white shadow-lg ring-1 ring-black/5"
+                    className="absolute top-0 left-0 origin-top-left bg-white shadow-hard-lg ring-2 ring-foreground"
                     style={{
                         width: pageW,
                         minHeight: pages * pageH,
@@ -78,10 +78,10 @@ export function Preview({
                     {Array.from({ length: pages - 1 }, (_, i) => (
                         <div
                             key={i}
-                            className="pointer-events-none absolute right-0 left-0 border-t border-dashed border-rose-400/70"
+                            className="pointer-events-none absolute right-0 left-0 border-t border-dashed border-bad/70"
                             style={{ top: margin + (i + 1) * contentH }}
                         >
-                            <span className="absolute right-2 -top-5 rounded bg-rose-50 px-1.5 text-[11px] text-rose-600">
+                            <span className="absolute right-2 -top-5 rounded bg-bad-wash px-1.5 text-[11px] text-bad-ink">
                                 page {i + 2}
                             </span>
                         </div>

@@ -7,9 +7,9 @@ import { cn } from '#/lib/utils'
 import type { AtsStatus } from '#/cv/ats'
 
 const ICON: Record<AtsStatus, React.ReactNode> = {
-    pass: <CircleCheck className="size-4 text-emerald-600" />,
-    warn: <CircleAlert className="size-4 text-amber-600" />,
-    fail: <CircleX className="size-4 text-rose-600" />,
+    pass: <CircleCheck className="size-4 text-win-ink" />,
+    warn: <CircleAlert className="size-4 text-warn-ink" />,
+    fail: <CircleX className="size-4 text-bad-ink" />,
 }
 
 /** Slide-over that runs the ATS check against the current CV. */
@@ -68,8 +68,8 @@ export function AtsPanel({
                                     key={c.id}
                                     className={cn(
                                         'flex gap-2 rounded-md border p-2',
-                                        c.status === 'fail' && 'border-rose-200 bg-rose-50/50',
-                                        c.status === 'warn' && 'border-amber-200 bg-amber-50/50',
+                                        c.status === 'fail' && 'border-bad bg-bad-wash/50',
+                                        c.status === 'warn' && 'border-warn bg-warn-wash/50',
                                     )}
                                 >
                                     <span className="mt-0.5">{ICON[c.status]}</span>

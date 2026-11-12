@@ -23,7 +23,7 @@ function AiButton({
             type="button"
             variant="ghost"
             size="sm"
-            className="text-violet-700 hover:text-violet-800"
+            className="text-ai-ink hover:text-foreground"
             disabled={!ai.enabled || pending}
             title={ai.enabled ? undefined : 'Set ANTHROPIC_API_KEY in .env to enable AI'}
             onClick={onClick}
@@ -89,9 +89,9 @@ export function BulletCoach({
             )}
             <ErrorLine error={run.error} />
             {result && (
-                <div className="space-y-2 rounded-md border border-violet-200 bg-violet-50/50 p-2">
+                <div className="space-y-2 rounded-md border border-ai bg-ai-wash/50 p-2">
                     <div className="flex items-center gap-2 text-xs">
-                        <Sparkles className="size-3.5 text-violet-700" />
+                        <Sparkles className="size-3.5 text-ai-ink" />
                         <span className="font-medium">Suggestions</span>
                         <span className="text-muted-foreground">
                             {open.length ? '' : 'Bullets already look strong.'}
@@ -126,25 +126,22 @@ export function BulletCoach({
                         const same = b.suggestion.trim() === original.trim()
                         return (
                             <div key={b.index} className="space-y-1 rounded bg-background p-2 text-sm">
-                                <div className="text-muted-foreground line-through decoration-rose-300">{original}</div>
-                                {!same && <div className="text-emerald-900">{b.suggestion}</div>}
+                                <div className="text-muted-foreground line-through decoration-bad">{original}</div>
+                                {!same && <div className="text-win-ink">{b.suggestion}</div>}
                                 <div className="flex flex-wrap items-center gap-1.5">
                                     {b.issues.map((i) => (
-                                        <span
-                                            key={i}
-                                            className="rounded bg-amber-100 px-1.5 text-[11px] text-amber-800"
-                                        >
+                                        <span key={i} className="rounded bg-warn-wash px-1.5 text-[11px] text-warn-ink">
                                             {i}
                                         </span>
                                     ))}
                                     {b.needsNumber && (
-                                        <span className="rounded bg-sky-100 px-1.5 text-[11px] text-sky-800">
+                                        <span className="rounded bg-info-wash px-1.5 text-[11px] text-info-ink">
                                             add a number if you have one
                                         </span>
                                     )}
                                     {!same &&
                                         (done.has(b.index) ? (
-                                            <span className="ml-auto text-xs text-emerald-700">Applied</span>
+                                            <span className="ml-auto text-xs text-win-ink">Applied</span>
                                         ) : (
                                             <Button
                                                 type="button"
@@ -181,10 +178,7 @@ export function SummaryHelper({ doc, onApply }: { doc: CvDoc; onApply: (text: st
             </AiButton>
             <ErrorLine error={run.error} />
             {options?.map((o, i) => (
-                <div
-                    key={i}
-                    className="flex items-start gap-2 rounded-md border border-violet-200 bg-violet-50/50 p-2 text-sm"
-                >
+                <div key={i} className="flex items-start gap-2 rounded-md border border-ai bg-ai-wash/50 p-2 text-sm">
                     <p className="flex-1">{o}</p>
                     <Button
                         type="button"

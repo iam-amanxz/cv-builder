@@ -25,9 +25,9 @@ const STATUS_LABEL: Record<SkillStatus, string> = {
     ignore: 'Ignore',
 }
 const STATUS_TONE: Record<SkillStatus, string> = {
-    open: 'bg-rose-50 text-rose-900 border-rose-200',
-    learning: 'bg-sky-50 text-sky-900 border-sky-200',
-    have: 'bg-emerald-50 text-emerald-900 border-emerald-200',
+    open: 'bg-bad-wash text-bad-ink border-bad',
+    learning: 'bg-info-wash text-info-ink border-info',
+    have: 'bg-win-wash text-win-ink border-win',
     ignore: 'bg-muted text-muted-foreground',
 }
 
@@ -41,14 +41,14 @@ function GapsPage() {
 
     return (
         <div className="min-h-dvh bg-muted/30">
-            <header className="flex items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to all CVs">
                     <Link to="/">
                         <ArrowLeft />
                     </Link>
                 </Button>
                 <Target className="text-muted-foreground size-4" />
-                <h1 className="font-medium">Skill gaps</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">Skill gaps</h1>
                 <span className="text-muted-foreground text-xs">
                     {active.length} to work on · from {jobs} job{jobs === 1 ? '' : 's'}
                 </span>
@@ -63,7 +63,7 @@ function GapsPage() {
                     application.
                 </p>
                 {gaps.length === 0 ? (
-                    <div className="rounded-lg border bg-card p-8 text-center">
+                    <div className="rounded-xl border-2 bg-card shadow-hard p-8 text-center">
                         <p className="font-medium">No gaps recorded yet</p>
                         <p className="text-muted-foreground mt-1">
                             Open an application and add skills it asks for, or use "Find gaps with AI".
@@ -113,7 +113,7 @@ function GapRow({ gap, maxScore }: { gap: SkillGap; maxScore: number }) {
     const score = scoreOf(gap)
 
     return (
-        <li className="rounded-lg border bg-card">
+        <li className="rounded-xl border-2 bg-card shadow-hard-sm">
             <div className="flex items-center gap-3 p-3">
                 <button
                     className="flex min-w-0 flex-1 items-center gap-2 text-left"
@@ -134,7 +134,7 @@ function GapRow({ gap, maxScore }: { gap: SkillGap; maxScore: number }) {
                 </button>
                 <div className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-muted sm:block" aria-hidden>
                     <div
-                        className="h-full rounded-full bg-rose-400"
+                        className="h-full rounded-full bg-bad"
                         style={{ width: `${Math.max(8, (score / maxScore) * 100)}%` }}
                     />
                 </div>
@@ -165,8 +165,8 @@ function GapRow({ gap, maxScore }: { gap: SkillGap; maxScore: number }) {
                                         className={cn(
                                             'rounded px-1.5 py-0.5 text-[11px]',
                                             j.importance === 'required'
-                                                ? 'bg-rose-100 text-rose-800'
-                                                : 'bg-zinc-100 text-zinc-700',
+                                                ? 'bg-bad-wash text-bad-ink'
+                                                : 'bg-muted text-foreground',
                                         )}
                                     >
                                         {j.importance === 'required' ? 'Required' : 'Nice to have'}
@@ -189,7 +189,7 @@ function GapRow({ gap, maxScore }: { gap: SkillGap; maxScore: number }) {
                         onBlur={() => notes !== gap.notes && update.mutate({ notes })}
                     />
                     {gap.status === 'have' && (
-                        <p className="text-xs text-emerald-800">
+                        <p className="text-xs text-win-ink">
                             If you have this, add it to your CV so it stops showing up as a gap.
                         </p>
                     )}

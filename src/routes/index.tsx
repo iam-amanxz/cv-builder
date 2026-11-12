@@ -47,7 +47,9 @@ function Dashboard() {
     return (
         <main className="mx-auto max-w-4xl px-4 py-10">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold tracking-tight">Your CVs</h1>
+                <h1 className="text-3xl font-extrabold tracking-tight">
+                    <span className="marker">Your CVs</span>
+                </h1>
                 <Button asChild variant="ghost" size="sm" className="ml-auto">
                     <Link to="/applications" search={{ add: 'link' }}>
                         <Link2 /> Add job from link
@@ -104,7 +106,7 @@ function Dashboard() {
                 </Button>
             </form>
 
-            <ul className="mt-8 divide-y rounded-lg border bg-card">
+            <ul className="mt-8 divide-y divide-hairline rounded-xl border-2 bg-card shadow-hard">
                 {variants.map((v) => (
                     <li key={v.id} className="flex items-center gap-3 px-4 py-3">
                         <FileText className="text-muted-foreground size-5 shrink-0" />

@@ -231,7 +231,7 @@ function EditorPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to all CVs">
                     <Link to="/">
                         <ArrowLeft />
@@ -250,7 +250,7 @@ function EditorPage() {
                 <div className="ml-auto flex items-center gap-3">
                     {layout.spillLines > 0 ? (
                         <span
-                            className="inline-flex items-center gap-1 text-xs text-amber-700"
+                            className="inline-flex items-center gap-1 text-xs text-warn-ink"
                             title="The last page is nearly empty. Tighten spacing, text size or margins, or hide an item to save a page."
                         >
                             <TriangleAlert className="size-3.5" />
@@ -278,11 +278,11 @@ function EditorPage() {
                         </span>
                     )}
                     {fitMsg && fitTarget === null && <span className="text-muted-foreground text-xs">{fitMsg}</span>}
-                    {version.isSuccess && <span className="text-xs text-emerald-700">Version saved</span>}
+                    {version.isSuccess && <span className="text-xs text-win-ink">Version saved</span>}
                     <Button variant="ghost" onClick={() => setAtsOpen((o) => !o)}>
                         <ScanText /> ATS check
                     </Button>
-                    <Button variant="ghost" className="text-violet-700" onClick={() => void openTailor()}>
+                    <Button variant="ai" onClick={() => void openTailor()}>
                         <Sparkles /> Tailor to job
                     </Button>
                     <Button variant="ghost" onClick={() => void openLetters()}>
@@ -348,14 +348,14 @@ function EditorPage() {
                 {atsOpen && (
                     <AtsPanel variantId={variantId} beforeRun={() => flush()} onClose={() => setAtsOpen(false)} />
                 )}
-                <aside className="min-h-0 overflow-y-auto border-r p-4">
+                <aside className="min-h-0 overflow-y-auto border-r-2 p-4">
                     <AiProvider value={aiCtx}>
                         <CvEditor doc={doc} mutate={mutate} />
                     </AiProvider>
                     <ExportHistory items={exportsList.data} />
                 </aside>
-                <section className="flex min-h-0 flex-col bg-muted/60">
-                    <div className="border-b bg-card/70 px-4 py-2">
+                <section className="bg-desk flex min-h-0 flex-col">
+                    <div className="border-b-2 bg-card px-4 py-2">
                         <ThemePanel
                             themeId={themeId}
                             tokens={tokens}
@@ -406,7 +406,7 @@ function ExportHistory({
     return (
         <div className="mt-6">
             <h2 className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">Recent exports</h2>
-            <ul className="divide-y rounded-lg border bg-card text-sm">
+            <ul className="divide-y divide-hairline rounded-xl border-2 bg-card shadow-hard text-sm">
                 {items.map((e) => (
                     <li key={e.id} className="flex items-center gap-2 px-3 py-2">
                         <span className="min-w-0 flex-1 truncate" title={e.fileName}>

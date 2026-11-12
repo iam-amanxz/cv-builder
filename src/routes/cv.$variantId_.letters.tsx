@@ -118,14 +118,14 @@ function LettersPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to editor">
                     <Link to="/cv/$variantId" params={{ variantId }}>
                         <ArrowLeft />
                     </Link>
                 </Button>
                 <Mail className="text-muted-foreground size-4" />
-                <h1 className="font-medium">Cover letters · {variant.name}</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">Cover letters · {variant.name}</h1>
                 {current && (
                     <span className="text-muted-foreground text-xs">{saved ? 'Saved' : 'Unsaved changes…'}</span>
                 )}
@@ -283,7 +283,7 @@ function LettersPage() {
 
                 <section className="min-h-0 overflow-y-auto bg-muted/60 p-6">
                     {current && (
-                        <div className="mx-auto max-w-[210mm] bg-white p-[18mm] shadow-lg ring-1 ring-black/5">
+                        <div className="mx-auto max-w-[210mm] bg-white p-[18mm] shadow-hard-lg ring-2 ring-foreground">
                             <Letter
                                 doc={variant.doc}
                                 tokens={tokens}

@@ -28,16 +28,18 @@ function SettingsPage() {
                         <ArrowLeft />
                     </Link>
                 </Button>
-                <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+                <h1 className="text-3xl font-extrabold tracking-tight">
+                    <span className="marker">Settings</span>
+                </h1>
             </div>
 
             <section className="space-y-2">
                 <h2 className="font-medium">AI</h2>
-                <div className="flex items-start gap-3 rounded-lg border bg-card p-4 text-sm">
+                <div className="flex items-start gap-3 rounded-xl border-2 bg-card shadow-hard p-4 text-sm">
                     {status.configured ? (
-                        <CheckCircle2 className="mt-0.5 size-5 text-emerald-600" />
+                        <CheckCircle2 className="mt-0.5 size-5 text-win-ink" />
                     ) : (
-                        <CircleAlert className="mt-0.5 size-5 text-amber-600" />
+                        <CircleAlert className="mt-0.5 size-5 text-warn-ink" />
                     )}
                     <div className="space-y-1">
                         <p className="font-medium">{status.configured ? 'Connected' : 'Not configured'}</p>
@@ -69,7 +71,7 @@ function SettingsPage() {
                                     ['All time', usage.data.allTime],
                                 ] as const
                             ).map(([label, t]) => (
-                                <div key={label} className="rounded-lg border bg-card p-4">
+                                <div key={label} className="rounded-xl border-2 bg-card shadow-hard p-4">
                                     <div className="text-muted-foreground text-xs">{label}</div>
                                     <div className="mt-1 text-2xl font-semibold tabular-nums">{usd(t?.cost ?? 0)}</div>
                                     <div className="text-muted-foreground mt-1 text-xs tabular-nums">
@@ -83,7 +85,7 @@ function SettingsPage() {
                             Estimated from token counts at list prices; your Anthropic console is the source of truth.
                         </p>
                         {usage.data.recent.length > 0 && (
-                            <div className="overflow-x-auto rounded-lg border bg-card">
+                            <div className="overflow-x-auto rounded-xl border-2 bg-card shadow-hard">
                                 <table className="w-full text-sm">
                                     <thead className="text-muted-foreground border-b text-left text-xs">
                                         <tr>
@@ -95,7 +97,7 @@ function SettingsPage() {
                                             <th className="px-3 py-2 text-right font-normal">Time</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y">
+                                    <tbody className="divide-y divide-hairline">
                                         {usage.data.recent.map((r) => (
                                             <tr key={r.id} title={r.error ?? undefined}>
                                                 <td className="px-3 py-2 whitespace-nowrap">
@@ -105,7 +107,7 @@ function SettingsPage() {
                                                 <td
                                                     className={cn(
                                                         'px-3 py-2',
-                                                        r.status === 'ok' ? 'text-emerald-700' : 'text-rose-700',
+                                                        r.status === 'ok' ? 'text-win-ink' : 'text-bad-ink',
                                                     )}
                                                 >
                                                     {r.status}

@@ -109,7 +109,7 @@ function Card({
 }) {
     const [open, setOpen] = useState(defaultOpen)
     return (
-        <div className={cn('rounded-lg border bg-card', muted && 'opacity-60')}>
+        <div className={cn('rounded-xl border-2 bg-card shadow-hard-sm', muted && 'opacity-60')}>
             <div className="flex cursor-pointer items-center gap-2 px-3 py-2" onClick={() => setOpen((o) => !o)}>
                 {open ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                 <div className="min-w-0 flex-1 truncate font-medium">{title}</div>

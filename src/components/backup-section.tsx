@@ -21,7 +21,7 @@ export function BackupSection() {
     return (
         <section className="space-y-2">
             <h2 className="font-medium">Backup</h2>
-            <div className="space-y-4 rounded-lg border bg-card p-4 text-sm">
+            <div className="space-y-4 rounded-xl border-2 bg-card shadow-hard p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-3">
                     <Button asChild variant="outline">
                         <a href="/api/backup">
@@ -56,7 +56,7 @@ export function BackupSection() {
                     </div>
                     {restore.error && <p className="text-destructive">{restore.error.message}</p>}
                     {restore.data && (
-                        <p className="text-emerald-800">
+                        <p className="text-win-ink">
                             Restored. Previous database saved as <code>{restore.data.previous}</code>;{' '}
                             {restore.data.exportsAdded} exported files added.{' '}
                             <a className="underline" href="/">

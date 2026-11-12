@@ -34,13 +34,13 @@ function Check({
     return (
         <label
             className={cn(
-                'flex cursor-pointer gap-3 rounded-md border bg-card p-3 text-sm transition-colors',
-                checked ? 'border-violet-300 bg-violet-50/40' : 'opacity-70',
+                'flex cursor-pointer gap-3 rounded-lg border-2 bg-card p-3 text-sm transition-colors',
+                checked ? 'border-ai bg-ai-wash/40' : 'opacity-70',
             )}
         >
             <input
                 type="checkbox"
-                className="mt-0.5 size-4 accent-violet-600"
+                className="mt-0.5 size-4 accent-ai"
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
             />
@@ -50,7 +50,7 @@ function Check({
 }
 
 function Score({ value }: { value: number }) {
-    const tone = value >= 75 ? 'text-emerald-700' : value >= 50 ? 'text-amber-700' : 'text-rose-700'
+    const tone = value >= 75 ? 'text-win-ink' : value >= 50 ? 'text-warn-ink' : 'text-bad-ink'
     return (
         <div className="flex items-baseline gap-1">
             <span className={cn('text-3xl font-semibold tabular-nums', tone)}>{value}</span>
@@ -127,14 +127,14 @@ function TailorPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to editor">
                     <Link to="/cv/$variantId" params={{ variantId }}>
                         <ArrowLeft />
                     </Link>
                 </Button>
-                <Sparkles className="size-4 text-violet-700" />
-                <h1 className="font-medium">Tailor to job · {variant.name}</h1>
+                <Sparkles className="size-4 text-ai-ink" />
+                <h1 className="text-lg font-extrabold tracking-tight">Tailor to job · {variant.name}</h1>
                 {status.data && <span className="text-muted-foreground text-xs">{status.data.model}</span>}
                 {result && (
                     <div className="ml-auto flex items-center gap-2">
@@ -164,7 +164,7 @@ function TailorPage() {
             <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(420px,600px)_1fr]">
                 <aside className="min-h-0 space-y-4 overflow-y-auto border-r p-4">
                     {!configured && status.isSuccess && (
-                        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                        <div className="rounded-md border border-warn bg-warn-wash p-3 text-sm text-warn-ink">
                             AI is not set up. Add <code>ANTHROPIC_API_KEY</code> to <code>.env</code> and restart the
                             container.
                         </div>
@@ -224,7 +224,7 @@ function Proposals({
 }) {
     return (
         <div className="space-y-5">
-            <div className="space-y-3 rounded-md border bg-card p-3">
+            <div className="space-y-3 rounded-lg border-2 bg-card p-3">
                 <Score value={result.matchScore} />
                 {result.keywordsMissing.length > 0 && (
                     <div>
@@ -233,7 +233,7 @@ function Proposals({
                         </div>
                         <div className="flex flex-wrap gap-1">
                             {result.keywordsMissing.map((k) => (
-                                <span key={k} className="rounded bg-rose-50 px-1.5 py-0.5 text-xs text-rose-800">
+                                <span key={k} className="rounded bg-bad-wash px-1.5 py-0.5 text-xs text-bad-ink">
                                     {k}
                                 </span>
                             ))}
@@ -245,7 +245,7 @@ function Proposals({
                         <div className="text-muted-foreground mb-1 text-xs">Already covered</div>
                         <div className="flex flex-wrap gap-1">
                             {result.keywordsPresent.map((k) => (
-                                <span key={k} className="rounded bg-emerald-50 px-1.5 py-0.5 text-xs text-emerald-800">
+                                <span key={k} className="rounded bg-win-wash px-1.5 py-0.5 text-xs text-win-ink">
                                     {k}
                                 </span>
                             ))}
@@ -268,10 +268,10 @@ function Proposals({
                         checked={selected.has(proposalKey.summary())}
                         onChange={(v) => toggle(proposalKey.summary(), v)}
                     >
-                        <p className="text-muted-foreground line-through decoration-rose-300">
+                        <p className="text-muted-foreground line-through decoration-bad">
                             {variantDoc.basics.summary || '(empty)'}
                         </p>
-                        <p className="text-emerald-900">{result.summary.text}</p>
+                        <p className="text-win-ink">{result.summary.text}</p>
                         <p className="text-muted-foreground text-xs">{result.summary.reason}</p>
                     </Check>
                 </section>
@@ -287,10 +287,10 @@ function Proposals({
                                 <p className="text-muted-foreground text-xs">
                                     {itemLabel(variantDoc, b.section, b.itemId)}
                                 </p>
-                                <p className="text-muted-foreground line-through decoration-rose-300">
+                                <p className="text-muted-foreground line-through decoration-bad">
                                     {originalBullet(variantDoc, b.section, b.itemId, b.bulletIndex)}
                                 </p>
-                                <p className="text-emerald-900">{b.text}</p>
+                                <p className="text-win-ink">{b.text}</p>
                                 <p className="text-muted-foreground text-xs">{b.reason}</p>
                             </Check>
                         )

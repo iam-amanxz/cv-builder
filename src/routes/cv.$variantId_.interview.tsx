@@ -121,14 +121,14 @@ function InterviewPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to editor">
                     <Link to="/cv/$variantId" params={{ variantId }}>
                         <ArrowLeft />
                     </Link>
                 </Button>
                 <MessagesSquare className="text-muted-foreground size-4" />
-                <h1 className="font-medium">Interview prep · {variant.name}</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">Interview prep · {variant.name}</h1>
                 {current && (
                     <span className="text-muted-foreground text-xs">{saved ? 'Saved' : 'Unsaved changes…'}</span>
                 )}
@@ -297,7 +297,7 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
 
     return (
         <div className="mx-auto max-w-3xl space-y-6 text-sm">
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-xl border-2 bg-card shadow-hard p-4">
                 <h2 className="mb-1 font-medium">Where you stand</h2>
                 <p className="text-muted-foreground">{prep.fitSummary}</p>
             </div>
@@ -318,7 +318,7 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
                 </div>
                 <ol className="space-y-3">
                     {shown.map(({ q, n }) => (
-                        <li key={n} className="space-y-3 rounded-lg border bg-card p-4">
+                        <li key={n} className="space-y-3 rounded-xl border-2 bg-card shadow-hard p-4">
                             <div>
                                 <span className="text-muted-foreground text-xs">
                                     {n}. {QUESTION_CATEGORIES[q.category]}
@@ -332,14 +332,14 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
                                         Your evidence
                                     </h3>
                                     {q.evidence.map((e) => (
-                                        <blockquote key={e.text} className="border-l-2 border-violet-300 pl-3">
+                                        <blockquote key={e.text} className="border-l-2 border-ai pl-3">
                                             <p>{e.text}</p>
                                             <p className="text-muted-foreground text-xs">{e.where}</p>
                                         </blockquote>
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-xs text-amber-700">
+                                <p className="text-xs text-warn-ink">
                                     Nothing on your CV answers this directly. Prepare an example.
                                 </p>
                             )}
@@ -357,7 +357,7 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
                                 </dl>
                             </details>
                             <p className="flex gap-2 text-xs">
-                                <Lightbulb className="size-3.5 shrink-0 text-amber-600" />
+                                <Lightbulb className="size-3.5 shrink-0 text-warn-ink" />
                                 {q.tip}
                             </p>
                         </li>
@@ -374,16 +374,16 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
                         </Link>
                     </div>
                     {prep.gaps.map((g) => (
-                        <div key={g.skill} className="space-y-2 rounded-lg border bg-card p-4">
+                        <div key={g.skill} className="space-y-2 rounded-xl border-2 bg-card shadow-hard p-4">
                             <div className="flex items-center gap-2">
-                                <Target className="size-4 text-rose-600" />
+                                <Target className="size-4 text-bad-ink" />
                                 <span className="font-medium">{g.skill}</span>
                                 <span
                                     className={cn(
                                         'rounded px-1.5 py-0.5 text-[11px]',
                                         g.importance === 'required'
-                                            ? 'bg-rose-100 text-rose-800'
-                                            : 'bg-zinc-100 text-zinc-700',
+                                            ? 'bg-bad-wash text-bad-ink'
+                                            : 'bg-muted text-foreground',
                                     )}
                                 >
                                     {g.importance === 'required' ? 'Required' : 'Nice to have'}
@@ -403,7 +403,7 @@ function PrepResult({ prep }: { prep: InterviewPrep }) {
                 </section>
             )}
 
-            <section className="space-y-2 rounded-lg border bg-card p-4">
+            <section className="space-y-2 rounded-xl border-2 bg-card shadow-hard p-4">
                 <h2 className="font-medium">Questions to ask them</h2>
                 <ul className="list-disc space-y-1 pl-5">
                     {prep.questionsToAsk.map((q) => (
@@ -420,7 +420,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
         <button
             className={cn(
                 'rounded-full border px-2.5 py-0.5 text-xs',
-                active ? 'border-violet-300 bg-violet-100 text-violet-900' : 'bg-card hover:bg-muted',
+                active ? 'border-ai bg-ai-wash text-ai-ink' : 'bg-card hover:bg-muted',
             )}
             onClick={onClick}
         >

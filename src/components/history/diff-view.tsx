@@ -6,13 +6,11 @@ function Field({ c }: { c: FieldChange }) {
         <div className="grid gap-0.5 text-sm">
             <div className="text-muted-foreground text-xs">{c.label}</div>
             {c.before && (
-                <div className="rounded bg-rose-50 px-2 py-1 whitespace-pre-line text-rose-800 line-through decoration-rose-400/60">
+                <div className="rounded bg-bad-wash px-2 py-1 whitespace-pre-line text-bad-ink line-through decoration-bad/60">
                     {c.before}
                 </div>
             )}
-            {c.after && (
-                <div className="rounded bg-emerald-50 px-2 py-1 whitespace-pre-line text-emerald-900">{c.after}</div>
-            )}
+            {c.after && <div className="rounded bg-win-wash px-2 py-1 whitespace-pre-line text-win-ink">{c.after}</div>}
             {!c.after && <div className="text-muted-foreground px-2 text-xs italic">removed</div>}
         </div>
     )
@@ -28,8 +26,8 @@ function Lines({ l }: { l: ListChange }) {
                         key={i}
                         className={cn(
                             'flex gap-2 px-2 py-0.5',
-                            line.op === 'add' && 'bg-emerald-50 text-emerald-900',
-                            line.op === 'del' && 'bg-rose-50 text-rose-800 line-through decoration-rose-400/60',
+                            line.op === 'add' && 'bg-win-wash text-win-ink',
+                            line.op === 'del' && 'bg-bad-wash text-bad-ink line-through decoration-bad/60',
                             line.op === 'same' && 'text-muted-foreground',
                         )}
                     >
@@ -45,9 +43,9 @@ function Lines({ l }: { l: ListChange }) {
 }
 
 const BADGE = {
-    added: 'bg-emerald-100 text-emerald-800',
-    removed: 'bg-rose-100 text-rose-800',
-    changed: 'bg-amber-100 text-amber-800',
+    added: 'bg-win-wash text-win-ink',
+    removed: 'bg-bad-wash text-bad-ink',
+    changed: 'bg-warn-wash text-warn-ink',
 }
 
 function Badge({ kind }: { kind: keyof typeof BADGE }) {
@@ -56,7 +54,7 @@ function Badge({ kind }: { kind: keyof typeof BADGE }) {
 
 function Item({ c }: { c: ItemChange }) {
     return (
-        <div className="space-y-2 rounded-md border bg-card p-3">
+        <div className="space-y-2 rounded-lg border-2 bg-card p-3">
             <div className="flex items-center gap-2">
                 <Badge kind={c.kind} />
                 <span className="font-medium">{c.title}</span>
@@ -104,7 +102,7 @@ export function DiffView({ diff }: { diff: CvDiff }) {
             </p>
             {diff.basics.length > 0 && (
                 <Group title="Personal details">
-                    <div className="space-y-2 rounded-md border bg-card p-3">
+                    <div className="space-y-2 rounded-lg border-2 bg-card p-3">
                         {diff.basics.map((c) => (
                             <Field key={c.label} c={c} />
                         ))}
@@ -125,7 +123,7 @@ export function DiffView({ diff }: { diff: CvDiff }) {
                     }
                 >
                     {s.fields.length > 0 && (
-                        <div className="space-y-2 rounded-md border bg-card p-3">
+                        <div className="space-y-2 rounded-lg border-2 bg-card p-3">
                             {s.fields.map((c) => (
                                 <Field key={c.label} c={c} />
                             ))}
@@ -147,7 +145,7 @@ export function DiffView({ diff }: { diff: CvDiff }) {
             )}
             {diff.theme.length > 0 && (
                 <Group title="Theme">
-                    <div className="space-y-2 rounded-md border bg-card p-3">
+                    <div className="space-y-2 rounded-lg border-2 bg-card p-3">
                         {diff.theme.map((c) => (
                             <Field key={c.label} c={c} />
                         ))}

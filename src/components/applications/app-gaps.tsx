@@ -57,7 +57,7 @@ export function ApplicationGaps({ applicationId, hasDescription }: { application
                             className={cn(
                                 'inline-flex items-center gap-1 rounded-full border py-0.5 pr-1 pl-2 text-xs',
                                 g.importance === 'required'
-                                    ? 'border-rose-200 bg-rose-50 text-rose-900'
+                                    ? 'border-bad bg-bad-wash text-bad-ink'
                                     : 'bg-muted text-muted-foreground',
                             )}
                         >

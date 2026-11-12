@@ -67,13 +67,13 @@ function ImportPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex flex-wrap items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to all CVs">
                     <Link to="/">
                         <ArrowLeft />
                     </Link>
                 </Button>
-                <h1 className="font-medium">Import a CV</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">Import a CV</h1>
                 {result && (
                     <div className="ml-auto flex items-center gap-2">
                         <Input
@@ -100,7 +100,7 @@ function ImportPage() {
                         saving: nothing is created until you click “Create CV”.
                     </p>
                     {!aiOk && status.isSuccess && (
-                        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-amber-900">
+                        <div className="rounded-md border border-warn bg-warn-wash p-3 text-warn-ink">
                             AI is not set up, so only JSON Resume files can be imported. Add{' '}
                             <code>ANTHROPIC_API_KEY</code> to <code>.env</code> to import PDF and Word files.
                         </div>
@@ -139,7 +139,7 @@ function ImportPage() {
                     </Button>
                     {parse.error && <p className="text-destructive">{parse.error.message}</p>}
                     {result && (
-                        <p className="text-emerald-800">
+                        <p className="text-win-ink">
                             Read {result.doc.work.length} positions, {result.doc.education.length} education entries,{' '}
                             {result.doc.skills.length} skill groups
                             {result.doc.custom.length ? ` and ${result.doc.custom.length} other sections` : ''}. Review

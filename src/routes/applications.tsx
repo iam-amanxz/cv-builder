@@ -53,12 +53,12 @@ const STATUS_LABEL: Record<Status, string> = {
     ghosted: 'No reply',
 }
 const STATUS_TONE: Record<Status, string> = {
-    draft: 'border-t-zinc-400',
-    applied: 'border-t-sky-500',
-    interview: 'border-t-violet-500',
-    offer: 'border-t-emerald-500',
-    rejected: 'border-t-rose-400',
-    ghosted: 'border-t-amber-400',
+    draft: 'border-t-muted-foreground',
+    applied: 'border-t-info',
+    interview: 'border-t-ai',
+    offer: 'border-t-win',
+    rejected: 'border-t-bad',
+    ghosted: 'border-t-warn',
 }
 
 interface FormState {
@@ -114,13 +114,13 @@ function ApplicationsPage() {
 
     return (
         <div className="flex h-dvh flex-col">
-            <header className="flex items-center gap-3 border-b bg-card px-4 py-2">
+            <header className="flex items-center gap-3 border-b-2 bg-card px-4 py-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Back to all CVs">
                     <Link to="/">
                         <ArrowLeft />
                     </Link>
                 </Button>
-                <h1 className="font-medium">Applications</h1>
+                <h1 className="text-lg font-extrabold tracking-tight">Applications</h1>
                 <span className="text-muted-foreground text-xs">{apps.length} total</span>
                 <Button
                     variant="outline"
@@ -162,7 +162,7 @@ function ApplicationsPage() {
                                     {items.map(({ app, variantName, exportFile, exportFormat, snapshotId }) => (
                                         <li
                                             key={app.id}
-                                            className="space-y-1.5 rounded-md border bg-card p-2.5 text-sm shadow-xs"
+                                            className="space-y-1.5 rounded-lg border-2 bg-card p-2.5 text-sm shadow-hard-sm"
                                         >
                                             <button
                                                 className="block w-full text-left"
